@@ -7,6 +7,8 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.mvc", "js.mvc\js.mvc.njs
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.mvc.exampleWebApp", "js.mvc.exampleWebApp\js.mvc.exampleWebApp.njsproj", "{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.dom", "js.dom\js.dom.njsproj", "{A3325770-25B5-449F-8649-22F94A8A1C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3325770-25B5-449F-8649-22F94A8A1C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3325770-25B5-449F-8649-22F94A8A1C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3325770-25B5-449F-8649-22F94A8A1C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3325770-25B5-449F-8649-22F94A8A1C05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
