@@ -24,3 +24,10 @@
  * - Components
  * 
  */
+
+/**
+ * References:
+ * 
+ * - https://developer.mozilla.org/en-US/docs/Web/Web_Components
+ * - https://www.webcomponents.org/introduction
+ */
