@@ -27,6 +27,7 @@
  * - Components (stand alone)
  *   - Templates
  *   - Model (store data)
+ *   - (Otional) property binding
  *   - Events
  *
  */
