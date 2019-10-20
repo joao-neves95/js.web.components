@@ -1,7 +1,7 @@
 {
-  "name": "js.dom",
+  "name": "js.mvc.dom",
   "version": "0.0.0",
-  "description": "js.dom",
+  "description": "js.mvc.dom",
   "main": "app.js",
   "author": {
     "name": ""
