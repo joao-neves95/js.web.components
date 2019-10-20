@@ -9,6 +9,14 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.mvc.exampleWebApp", "js.
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.dom", "js.dom\js.dom.njsproj", "{A3325770-25B5-449F-8649-22F94A8A1C05}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8806393A-1323-4511-80BD-2CB6B69E770E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
