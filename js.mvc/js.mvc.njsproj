@@ -22,10 +22,11 @@
     <Content Include="app.js" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="component.js">
+    <Compile Include="component.js" />
+    <Compile Include="page.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="page.js">
+    <Compile Include="router.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="startup.js">
