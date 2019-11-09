@@ -1,8 +1,10 @@
 ﻿
+const nameListTemplate = `
 <div class="container">
     <ul>
         <_for c="let name of names">
-            <li> <r>name</r> </li>
+            <li> <@>name</@> </li>
         </_for>
     </ul>
 </div>
+`;

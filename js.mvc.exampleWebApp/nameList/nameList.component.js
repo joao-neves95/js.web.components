@@ -3,7 +3,7 @@
 class Header extends Component {
 
   constructor() {
-    super( '', '', [''] );
+    super( 'app-nameList', nameListTemplate, [''] );
 
     this.$names = ['John Doe', 'Oliver Hoe', 'Fiona Silva'];
 
