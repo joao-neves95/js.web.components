@@ -13,20 +13,20 @@ class TemplateCompiler {
     let currentChar = '';
     let currentSymbol;
     let currentProperty;
-    for ( let i = 0; i < component.templatePath.length; ++i ) {
+    for ( let i = 0; i < component.template.length; ++i ) {
       currentSymbol = '';
       currentProperty = '';
-      currentChar = component.templatePath[ i ];
+      currentChar = component.template[ i ];
 
-      if ( currentChar === '<' && component.templatePath[ i + 1 ] === '_' ) {
+      if ( currentChar === '<' && component.template[ i + 1 ] === '_' ) {
 
         // TODO: Turn this first if block into an independent method to be reusable.
         // VALUES RENDERER.
-        if ( component.templatePath[ i + 2 ] === '>' ) {
+        if ( component.template[ i + 2 ] === '>' ) {
           innerIndex = i + 3;
 
           while ( currentChar !== '<' ) {
-            currentChar = component.templatePath[ innerIndex ];
+            currentChar = component.template[ innerIndex ];
             currentProperty += currentChar;
             ++innerIndex;
           }
@@ -44,7 +44,7 @@ class TemplateCompiler {
           innerIndex = i + 2;
 
           while ( currentChar !== '>' ) {
-            currentChar = component.templatePath[ innerIndex ];
+            currentChar = component.template[ innerIndex ];
             currentSymbol += currentChar;
             ++innerIndex;
           }

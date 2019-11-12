@@ -30,7 +30,7 @@ class Startup {
         } );
       } );
 
-      // One page app.
+    // One page app.
     } else {}
   }
 

@@ -1,7 +1,7 @@
 {
-  "name": "js.mvc.example-web-app",
+  "name": "js.web.components.example-web-app",
   "version": "0.0.0",
-  "description": "js.mvc.exampleWebApp",
+  "description": "js.web.components.example-web-app",
   "main": "app.js",
   "author": {
     "name": ""

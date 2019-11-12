@@ -10,11 +10,11 @@ class Component {
    * @param { string } templatePath The path of the template.
    * @param { string[] } stylePaths An array of stylesheet file paths to inject on the component.
    */
-  constructor( targetElement, templatePath, stylePaths ) {
+  constructor( targetElement, template, stylePaths ) {
 
     this.targetElement = targetElement;
 
-    this.templatePath = templatePath;
+    this.template = template;
 
     this.stylePaths = stylePaths;
 
