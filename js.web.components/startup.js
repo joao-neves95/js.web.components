@@ -1,15 +1,14 @@
 ﻿/// <reference path="./utils.js" />
 /// <reference path="./node_modules/js.system.collections/dist/js.system.collections.js" />
 
-// TODO: Rebrand js.mvc to js.components
 
-// TODO: Turn into a singleton.
 class Startup {
 
   constructor() {
+
+    this.recompileComponents = false;
+
     this.components = new List();
-  }
-  constructor() {
     this.pages = [];
   }
 
@@ -21,9 +20,9 @@ class Startup {
 
   build() {
     // Single page.
-    if ( Utils.isNullOrUndefined( window.startup ) ) {
+    if ( this.pages.length <= 0 ) {
       this.components.forEach( ( component ) => {
-        const compiledHtml = TemplateCompiler.compile( component );
+        const compiledHtml = TemplateCompiler.compile( this, component );
 
         Array.from( document.getElementsByTagName( component.targetElement ) ).forEach( ( elem ) => {
           elem.innerHTML = compiledHtml;
@@ -31,7 +30,9 @@ class Startup {
       } );
 
     // One page app.
-    } else {}
+    } else {
+      // TODO: One page build logic.
+    }
   }
 
 }
