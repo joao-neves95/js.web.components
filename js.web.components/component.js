@@ -19,6 +19,10 @@ class Component {
     this.stylePaths = stylePaths;
 
     this.____private = {
+      /** 
+       *  type { string | null }
+       *  @type { string | null }
+       */
       compiledHtml: null
     };
 

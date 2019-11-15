@@ -41,15 +41,18 @@ class TemplateCompiler {
           // In case its a nested property (part of an object).
           const splitedProperties = currentProperty.split( '.' );
 
+          currentProperty = component;
           for ( let iProp; iProp < splitedProperties.length; ++iProp ) {
-            currentProperty = component[splitedProperties[i]];
+            currentProperty = currentProperty[splitedProperties[i]];
           }
 
           if ( !Utils.isNullOrUndefined( currentProperty ) ) {
             compiledHtml += component[ currentProperty ];
 
           } else {
-            throw new Error( `Property "${splitedProperties.join('.')}" not defined in the component "${component.constructor.name}".` );
+            throw new Error(
+              `Property "${splitedProperties.join( '.' )}" not defined in the component "${component.constructor.name}".`
+            );
           }
 
         // COMPLEX TAGS COMPILER.
@@ -71,7 +74,9 @@ class TemplateCompiler {
               break;
 
             default:
-              throw new Error( `Unknown symbol "<${SYNTAX_TOKENS.OpenTag}${SYNTAX_TOKENS.SyntaxTagToken}${currentSymbol}" on the template of the component "${component.constructor.name}".` );
+              throw new Error(
+                `Unknown symbol "${SYNTAX_TOKENS.OpenTag}${SYNTAX_TOKENS.SyntaxTagToken}${currentSymbol}" on the template of the component "${component.constructor.name}".`
+              );
           }
 
         }
