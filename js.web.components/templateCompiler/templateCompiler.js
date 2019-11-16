@@ -72,11 +72,11 @@ class TemplateCompiler {
 
           switch ( this.currentSymbol ) {
             case SYNTAX_TOKENS.For:
-              this.compiledHtml += ____TemplateBlocksCompiler.FOR( thisBlock );
+              this.compiledHtml += ____HTMLBlocksCompiler.FOR( thisBlock );
               break;
 
             case SYNTAX_TOKENS.If:
-              this.compiledHtml += ____TemplateBlocksCompiler.IF( thisBlock );
+              this.compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
               break;
 
             default:
@@ -122,7 +122,7 @@ TemplateCompiler.prototype.____private = {
 
  /**
   * Make sure to call this after "<_ or </_"
-  * @param { string } templete
+  * @param { string } template
   */
   getThisTag: ( template ) => {
     let tag = '';
@@ -138,7 +138,7 @@ TemplateCompiler.prototype.____private = {
 
   /**
    * Make sure to call this in the index of "<" in "<_".
-   * @param { string } templete
+   * @param { string } template
    */
   getThisComplexBlock: ( template ) => {
     let thisBlock = '';
