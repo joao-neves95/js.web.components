@@ -2,6 +2,13 @@
 class ____TemplateBlocksCompiler {
   constructor() { }
 
+  /**
+   * @param { string } propBlock
+   */
+  static PROP( propBlock ) {
+    return '';
+  }
+
   /** 
    * @param { string } forBlock
    */

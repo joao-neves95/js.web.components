@@ -26,12 +26,14 @@ class TemplateCompiler {
       this.currentChar = component.template[ i ];
 
       if ( this.currentChar !== SYNTAX_TOKENS.OpenTag && component.template[i + 1] !== SYNTAX_TOKENS.SyntaxTagToken ) {
+        // Normal HTML.
         this.compiledHtml += this.currentChar;
 
       } else {
         // TODO: Turn this first if block into an independent method to be reusable.
 
         // VALUES RENDERER.
+        // TODO: (VALUES RENDERER) Add property binding.
         if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
           // Jump this tokens (after "<_>").
           this.innerIndex = i + 3;
@@ -89,12 +91,21 @@ class TemplateCompiler {
       }
     } // end of FOR.
 
+    // This is because, in the future, this class will not be static.
+    const compiledHtml = this.compiledHtml;
+    this.compiledHtml = '';
+    this.innerIndex = 0;
+    this.currentChar = '';
+    this.currentSymbol = '';
+    this.currentBlock = '';
+    this.currentProperty = '';
+
     if ( !startup.recompileComponents || startup.pages.length <= 0 ) {
       component.template = null;
-      component.____private.this.compiledHtml = this.compiledHtml;
+      component.____private.this.compiledHtml = compiledHtml;
     }
 
-    return this.compiledHtml;
+    return compiledHtml;
   }
 
   // #endregion COMPILE
