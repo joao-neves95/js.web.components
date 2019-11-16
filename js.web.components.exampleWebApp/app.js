@@ -1,3 +1,6 @@
 'use strict';
 
-console.log('Hello world');
+window.startup =
+  new Startup()
+    .addComponent( new HeaderComponent() )
+    .build();
