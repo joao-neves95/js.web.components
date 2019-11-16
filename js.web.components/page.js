@@ -1,3 +1,6 @@
 ﻿
 class Page {
+
+  constructor() { }
+
 }

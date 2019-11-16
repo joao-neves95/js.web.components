@@ -1,6 +1,5 @@
-﻿/// <reference path="./../../js.mvc/component.js" />
-
-class Header extends Component {
+﻿
+class NameListComponent extends Component {
 
   constructor() {
     super( 'app-nameList', nameListTemplate, [''] );

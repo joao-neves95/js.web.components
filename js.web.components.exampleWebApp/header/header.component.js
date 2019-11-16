@@ -1,8 +1,8 @@
 ﻿
-class Header extends Component {
+class HeaderComponent extends Component {
 
   constructor() {
-    super( 'app-header', '', [''] );
+    super( 'app-header', headerTemplate, [''] );
 
     this.title = 'My Website';
   }
