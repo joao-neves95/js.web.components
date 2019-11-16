@@ -1,22 +1,49 @@
-﻿/// <reference path="./utils.js" />
-/// <reference path="./node_modules/js.system.collections/dist/js.system.collections.js" />
-
-
+﻿
 class Startup {
 
   constructor() {
 
     this.recompileComponents = false;
 
+    /** @type List<Component> */
     this.components = new List();
+
+    /** @type { Page[] } */
     this.pages = [];
+
+    return this;
   }
 
+  alwaysRecompileComponents() {
+    this.recompileComponents = true;
+  }
+
+  /**
+   * 
+   * @param { Component } component
+   */
   addComponent( component ) {
     this.components.add( component );
+    return this;
   }
 
-  addPage() {}
+  /**
+   * 
+   * @param { Component[] } components
+   */
+  addComponents( components ) {
+    for ( let i = 0; i < components.length; ++i ) {
+      this.components.add( components[] );
+    }
+  }
+
+  /**
+   * 
+   * @param { Page } page
+   */
+  addPage( page ) {
+    return this;
+  }
 
   build() {
     // Single page.
