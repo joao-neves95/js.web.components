@@ -6,10 +6,21 @@ const SYNTAX_TOKENS = Object.freeze( {
   CloseTag: '>',
   SyntaxTagToken: '_',
 
-  Equality: '==',
-  EqualityStrict: '===',
+  // Boolean()
+  Equal: '==',
+  EqualStrict: '===',
+  NotEqual: '!=',
+  NotEqualStrict: '!==',
+  Lesser: '<',
+  LesserOrEqual: '<=',
+  Greater: '>',
+  GreaterOrEqual: '>=',
 
   For: 'for',
-  If: 'if'
+  If: 'if',
+
+  //
+  Assignement: '='
+  //
 
 } );
