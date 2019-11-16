@@ -1,0 +1,9 @@
+{
+  "name": "js.web.http-client",
+  "version": "0.0.0",
+  "description": "js.web.httpClient",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  }
+}
