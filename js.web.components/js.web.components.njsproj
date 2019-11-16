@@ -29,6 +29,9 @@
     <Compile Include="constants\syntaxTokens.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\compiledTemplateModel.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="page.js">
       <SubType>Code</SubType>
     </Compile>
@@ -38,7 +41,10 @@
     <Compile Include="startup.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="templateCompiler\templateBlocksCompiler.js">
+    <Compile Include="templateCompiler\htmlBlocksCompiler.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="templateCompiler\templateElemCompiler.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="templateCompiler\templateCompiler.js" />

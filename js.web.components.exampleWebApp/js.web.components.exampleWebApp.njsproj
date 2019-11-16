@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="header\header.template.html">
+    <Content Include="header\header.template.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="index.html">
@@ -39,6 +39,9 @@
     </Compile>
     <Compile Include="nameList\nameList.component.js" />
     <Compile Include="nameList\nameList.template.js" />
+    <Compile Include="jsDocReferences.js">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->

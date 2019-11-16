@@ -17,12 +17,18 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.web.dom", "js.web.dom\js
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.web.components.exampleWebApp", "js.web.components.exampleWebApp\js.web.components.exampleWebApp.njsproj", "{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "js.web.httpClient", "js.web.httpClient\js.web.httpClient.njsproj", "{78F57042-5337-4216-B001-E11C0F2DC860}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Release|Any CPU.Build.0 = Release|Any CPU
 		{802C5A60-B759-4E33-8078-BB8EA05900E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{802C5A60-B759-4E33-8078-BB8EA05900E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802C5A60-B759-4E33-8078-BB8EA05900E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,10 +37,10 @@ Global
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84CEBC5C-3146-40C8-84E3-DFB67BD63D51}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3EBEE79-F4DA-48D1-90BC-8A352D4B3200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F57042-5337-4216-B001-E11C0F2DC860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F57042-5337-4216-B001-E11C0F2DC860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F57042-5337-4216-B001-E11C0F2DC860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F57042-5337-4216-B001-E11C0F2DC860}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
