@@ -1,7 +1,7 @@
 ﻿
 const headerTemplate = `
 <div class="container">
-    <h1> <_r> title </_r> </h1>
+    <h1> <_> title </_> </h1>
 </div>
 `;
 

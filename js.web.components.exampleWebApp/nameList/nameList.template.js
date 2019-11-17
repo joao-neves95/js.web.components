@@ -2,8 +2,8 @@
 const nameListTemplate = `
 <div class="container">
     <ul>
-        <_for c="let name of names">
-            <li> <_r>name</_r> </li>
+        <_for c="name of names">
+            <li> <_>name</_> </li>
         </_for>
     </ul>
 </div>
@@ -23,6 +23,6 @@ const nameListTemplate = `
 // compiled template reference:
 `
 <template target="app-nameList_for_1" component="app-nameList" binding="names" type="for">
-  <li> <_r>name</_r> </li>
+  <li> <_>name</_> </li>
 </template>
 `;

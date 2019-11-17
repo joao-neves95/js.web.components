@@ -1,4 +1,8 @@
 ﻿
+/** 
+ * For <template compilation>.
+ * This is used when there's property binding.
+ */
 class ____TemplateElemCompiler {
   constructor() { }
 
