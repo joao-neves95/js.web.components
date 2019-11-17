@@ -6,17 +6,21 @@ class Component {
    * <void> onInit()
    * <void> onDestroy()
    *
-   * @param { string } targetElement The name of the element where the element should be appended.
+   * @param { string } name The name of the component. To render this component, use a reference to this name ("&component-name").
    * @param { string } template The template.
-   * @param { string[] } stylePaths An array of stylesheet file paths to inject on the component.
+   * @param { string | string[] } stylesheet The stylesheet string, or an array, to inject on the component.
    */
-  constructor( targetElement, template, stylePaths ) {
+  constructor( name, template, stylesheet ) {
 
-    this.targetElement = targetElement;
+    if ( Utils.isNullOrUndefinedOrEmptyStr( targetElement ) ) {
+      throw new Error( 'You must provide a component name.' );
+    }
+
+    this.name = name;
 
     this.template = template;
 
-    this.stylePaths = stylePaths;
+    this.stylesheet = stylesheet;
 
     this.____private = {
       /** 
