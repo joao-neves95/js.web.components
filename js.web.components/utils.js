@@ -8,4 +8,8 @@ class Utils {
     return value === null || value === undefined;
   }
 
+  static isNullOrUndefinedOrEmptyStr( vlaue ) {
+    return value === '' || Utils.isNullOrUndefined( value );
+  }
+
 }
