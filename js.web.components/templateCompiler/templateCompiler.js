@@ -19,40 +19,40 @@ class TemplateCompiler {
    *
    * @param { Startup } startup
    * @param { Component } component
+   * 
+   * @return { string } The compiled HTML
    */
   static compile( startup, component ) {
 
     for ( let i = 0; i < component.template.length; ++i ) {
       this.currentChar = component.template[ i ];
 
-      if ( this.currentChar !== SYNTAX_TOKENS.OpenTag && component.template[i + 1] !== SYNTAX_TOKENS.SyntaxTagToken ) {
-        // Normal HTML.
-        this.compiledHtml += this.currentChar;
+      if ( this.currentChar === SYNTAX_TOKENS.OpenTag && ( component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken || component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) ) {
 
-      } else {
-        // TODO: Turn this first if block into an independent method to be reusable.
+        if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
+          this.innerIndex = i + 2;
+          this.currentSymbol = this.____private.getThisTag( component.template );
+          // Check in the startup instance if the component has already been compiled.
+          // If not, compile it.
 
-        // VALUES RENDERER.
-        // TODO: (VALUES RENDERER) Add property binding.
-        if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+        } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+          // VALUES RENDERER.
+          // TODO: (VALUES RENDERER) Add property binding.
           // Jump this tokens (after "<_>").
           this.innerIndex = i + 3;
 
           while ( this.currentChar !== SYNTAX_TOKENS.OpenTag ) {
-            this.currentChar = component.template[ this.innerIndex ];
+            this.currentChar = component.template[this.innerIndex];
+
+            if ( this.currentChar === ' ' ) {
+              continue;
+            }
+
             this.currentProperty += this.currentChar;
             ++this.innerIndex;
           }
 
-          // PROPERTY ACCESSOR
-          this.currentProperty = this.currentProperty.replace( /\s/g, '' );
-          // In case its a nested property (part of an object).
-          const splitedProperties = this.currentProperty.split( '.' );
-
-          this.currentProperty = component;
-          for ( let iProp; iProp < splitedProperties.length; ++iProp ) {
-            this.currentProperty = this.currentProperty[splitedProperties[i]];
-          }
+          this.currentProperty += ____HTMLBlocksCompiler.currentProperty( component, this.currentProperty );
 
           if ( !Utils.isNullOrUndefined( this.currentProperty ) ) {
             this.compiledHtml += component[ this.currentProperty ];
@@ -65,8 +65,8 @@ class TemplateCompiler {
 
         // COMPLEX TAGS COMPILER.
         } else {
-          // The index of "<" in "<_".
-          this.innerIndex = i;
+          // The index after in "<_".
+          this.innerIndex = i + 2;
           this.currentSymbol = this.____private.getThisTag( component.template );
           this.currentBlock = this.____private.getThisComplexBlock( component.template );
 
@@ -88,7 +88,12 @@ class TemplateCompiler {
 
         // Advance forward.
         i = this.innerIndex;
+
+      } else {
+        // Normal HTML.
+        this.compiledHtml += this.currentChar;
       }
+
     } // end of FOR.
 
     // This is because, in the future, this class will not be static.
@@ -129,6 +134,11 @@ TemplateCompiler.prototype.____private = {
 
     while ( this.currentChar !== SYNTAX_TOKENS.CloseTag ) {
       this.currentChar = template[this.innerIndex];
+
+      if ( this.currentChar === ' ' ) {
+        continue;
+      }
+
       tag += this.currentChar;
       ++this.innerIndex;
     }
@@ -137,6 +147,7 @@ TemplateCompiler.prototype.____private = {
   },
 
   /**
+   * Get the value inside a complex template tag.
    * Make sure to call this in the index of "<" in "<_".
    * @param { string } template
    */
