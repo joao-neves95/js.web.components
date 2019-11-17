@@ -5,6 +5,7 @@ const SYNTAX_TOKENS = Object.freeze( {
   ClosingTag: '/',
   CloseTag: '>',
   SyntaxTagToken: '_',
+  ComponentRef: '&',
 
   // Boolean()
   Equal: '==',

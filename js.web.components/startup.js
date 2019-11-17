@@ -51,7 +51,7 @@ class Startup {
       this.components.forEach( ( component ) => {
         const compiledHtml = TemplateCompiler.compile( this, component );
 
-        Array.from( document.getElementsByTagName( component.targetElement ) ).forEach( ( elem ) => {
+        Array.from( document.getElementsByTagName( SYNTAX_TOKENS.ComponentRef + component.name ) ).forEach( ( elem ) => {
           elem.innerHTML = compiledHtml;
         } );
       } );
