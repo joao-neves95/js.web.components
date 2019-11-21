@@ -6,10 +6,10 @@
 		"readme": "https://github.com/joao-neves95/merger-js/blob/master/README.md",
 		"changelog": "https://github.com/joao-neves95/merger-js/blob/master/CHANGELOG.md"
 	},
-	"autoBuild": false,
+	"autoBuild": true,
 	"notifications": false,
 	"updateOnLaunch": true,
-	"lastUpdateCheck": "2019-11-21T01:04:12.000Z",
+	"lastUpdateCheck": "2019-11-21T13:41:38.000Z",
 	"sourceFiles": [
 		{
 			"source": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components\\js.web.components.header.js",
