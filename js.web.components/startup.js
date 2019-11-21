@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="./node_modules/js.system.collections/dist/js.system.collections.js" />
+
 class Startup {
 
   constructor() {
@@ -33,7 +34,7 @@ class Startup {
    */
   addComponents( components ) {
     for ( let i = 0; i < components.length; ++i ) {
-      this.components.add( components[] );
+      this.components.add( components[i] );
     }
   }
 
@@ -51,7 +52,7 @@ class Startup {
       this.components.forEach( ( component ) => {
         const compiledHtml = TemplateCompiler.compile( this, component );
 
-        Array.from( document.getElementsByTagName( SYNTAX_TOKENS.ComponentRef + component.name ) ).forEach( ( elem ) => {
+        Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
           elem.innerHTML = compiledHtml;
         } );
       } );
