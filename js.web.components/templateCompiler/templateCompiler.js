@@ -27,11 +27,11 @@ class TemplateCompiler {
     for ( let i = 0; i < component.template.length; ++i ) {
       this.currentChar = component.template[i];
 
-      if ( this.currentChar === SYNTAX_TOKENS.OpenTag && ( component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken || component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) ) {
+      if ( this.currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
+        // TODO: Change to acomodate the new syntax: "app-<someName>&"
         if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
           this.innerIndex = i + 2;
-          this.currentSymbol = this.____private.getThisTag( component.template );
           // TODO: Check in the startup instance if the component has already been compiled.
           // If not, compile it.
 
@@ -54,6 +54,7 @@ class TemplateCompiler {
 
           switch ( this.currentSymbol ) {
             case SYNTAX_TOKENS.For:
+              console.log( 'FOR block' );
               // this.compiledHtml += ____HTMLBlocksCompiler.FOR( thisBlock );
               break;
 
@@ -97,68 +98,66 @@ class TemplateCompiler {
 
   // #endregion COMPILE
 
-}
-
-// #region PRIVATE METHODS
-
-/**
- * Internal methods.
- * This methods use and change "this.currentChar" and "this.innerIndex".
- */
-TemplateCompiler.prototype.____private = {
-
- /**
-  * Make sure to call this after "<_ or </_"
-  * @param { string } template
-  */
-  getThisTag: ( template ) => {
-    let tag = '';
-
-    do {
-      this.currentChar = template[this.innerIndex];
-      ++this.innerIndex;
-
-      if ( this.currentChar === ' ' ) {
-        continue;
-      }
-
-      tag += this.currentChar;
-
-    } while ( this.currentChar !== SYNTAX_TOKENS.CloseTag );
-
-    return tag;
-  },
+  // #region PRIVATE METHODS
 
   /**
-   * Get the value inside a complex template tag.
-   * Make sure to call this in the index of "<" in "<_".
-   * @param { string } template
+   * Internal methods.
+   * This methods use and change "this.currentChar" and "this.innerIndex".
    */
-  getThisComplexBlock: ( template ) => {
-    let thisBlock = '';
-    let closeToken = '';
+  static get ____private() {
+    return {
+      /**
+       * Make sure to call this after "<_ or </_"
+       * @param { string } template
+       */
+      getThisTag: ( template ) => {
+        let tag = '';
 
-    let blockEnded = false;
-    while ( !blockEnded ) {
-      this.currentChar = template[this.innerIndex];
-      thisBlock += this.currentChar;
-      ++this.innerIndex;
+        do {
+          this.currentChar = template[this.innerIndex];
+          ++this.innerIndex;
 
-      if ( this.currentChar === SYNTAX_TOKENS.OpenTag &&
-           component.template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
-           component.template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken
-      ) {
-        closeToken = this.getThisTag( component.template );
+          tag += this.currentChar;
 
-        if ( closeToken === SYNTAX_TOKENS.For ) {
-          blockEnded = true;
+        } while ( this.currentChar !== SYNTAX_TOKENS.CloseTag && this.currentChar !== ' ' && this.currentChar !== '=' );
+
+        return tag.substring( 0, tag.length - 1 );
+      },
+
+      /**
+       * Get the value inside a complex template tag.
+       * Make sure to call this in the index of "<" in "<_".
+       * @param { string } template
+       */
+      getThisComplexBlock: ( template ) => {
+        let thisBlock = '';
+        let closeToken = '';
+
+        let blockEnded = false;
+        while ( !blockEnded ) {
+          this.currentChar = template[this.innerIndex];
+          thisBlock += this.currentChar;
+          ++this.innerIndex;
+
+          if ( this.currentChar === SYNTAX_TOKENS.OpenTag &&
+            component.template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
+            component.template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken
+          ) {
+            closeToken = this.getThisTag( component.template );
+
+            if ( closeToken === SYNTAX_TOKENS.For ) {
+              blockEnded = true;
+            }
+          }
+
+          return thisBlock;
         }
       }
 
-      return thisBlock;
-    }
+    };
   }
 
-};
+  // #endregion PRIVATE METHODS
 
-// #endregion PRIVATE METHODS
+} // end of class
+
