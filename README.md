@@ -8,7 +8,7 @@ js.web only supports the main browsers (I.e.: Firefox, Chrome, Opera, Safari).<b
 js.web does not support Internet Explorer.
 
 
-# Motivation
+## Motivation
 My teacher told the class to make a project using HTML, CSS and JQuery.<br/>
 I already had experience working with these technologies, so I've asked him if I could use Angular or other framework. He said no.<br/>
 So, I decided to make my own framework.<br/>
