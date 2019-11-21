@@ -1,0 +1,32 @@
+{
+	"uglify": false,
+	"mergerJsLinks": {
+		"npm": "https://www.npmjs.com/package/merger-js",
+		"github": "https://github.com/joao-neves95/merger-js",
+		"readme": "https://github.com/joao-neves95/merger-js/blob/master/README.md",
+		"changelog": "https://github.com/joao-neves95/merger-js/blob/master/CHANGELOG.md"
+	},
+	"autoBuild": false,
+	"notifications": false,
+	"updateOnLaunch": true,
+	"lastUpdateCheck": "2019-11-21T01:04:12.000Z",
+	"sourceFiles": [
+		{
+			"source": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components\\js.web.components.header.js",
+			"output": {
+				"path": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components\\dist",
+				"name": "js.web.components.js"
+			},
+			"config": null
+		},
+		{
+			"source": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components.exampleWebApp\\appComponents.header.js",
+			"output": {
+				"path": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components.exampleWebApp\\dist",
+				"name": "appComponents.js"
+			},
+			"config": null
+		}
+	],
+	"nodeModulesPath": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components\\node_modules"
+}
