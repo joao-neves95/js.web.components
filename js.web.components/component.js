@@ -12,7 +12,7 @@ class Component {
    */
   constructor( name, template, stylesheet ) {
 
-    if ( Utils.isNullOrUndefinedOrEmptyStr( targetElement ) ) {
+    if ( Utils.isNullOrUndefinedOrEmptyStr( name ) ) {
       throw new Error( 'You must provide a component name.' );
     }
 

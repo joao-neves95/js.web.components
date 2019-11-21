@@ -4,11 +4,11 @@ class Utils {
     throw new Error( 'Static class' );
   }
 
-  static isNullOrUndefined( vlaue ) {
+  static isNullOrUndefined( value ) {
     return value === null || value === undefined;
   }
 
-  static isNullOrUndefinedOrEmptyStr( vlaue ) {
+  static isNullOrUndefinedOrEmptyStr( value ) {
     return value === '' || Utils.isNullOrUndefined( value );
   }
 
