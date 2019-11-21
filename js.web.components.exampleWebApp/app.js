@@ -2,5 +2,6 @@
 
 window.startup =
   new Startup()
-    .addComponent( new HeaderComponent() )
-    .build();
+  .addComponent( new HeaderComponent() )
+  .addComponent( new NameListComponent() )
+  .build();
