@@ -3,13 +3,12 @@
 class TemplateCompiler {
   constructor() {
 
-    this.compiledHtml = '';
+    this.compiledHtml;
 
-    this.innerIndex = 0;
-    this.currentChar = '';
-    this.currentSymbol = '';
-    this.currentBlock = '';
-    this.currentProperty = '';
+    this.innerIndex;
+    this.currentChar;
+    this.currentSymbol;
+    this.currentBlock;
   }
 
   // #region COMPILE
@@ -23,16 +22,17 @@ class TemplateCompiler {
    * @return { string } The compiled HTML
    */
   static compile( startup, component ) {
+    this.compiledHtml = '';
 
     for ( let i = 0; i < component.template.length; ++i ) {
-      this.currentChar = component.template[ i ];
+      this.currentChar = component.template[i];
 
       if ( this.currentChar === SYNTAX_TOKENS.OpenTag && ( component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken || component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) ) {
 
         if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
           this.innerIndex = i + 2;
           this.currentSymbol = this.____private.getThisTag( component.template );
-          // Check in the startup instance if the component has already been compiled.
+          // TODO: Check in the startup instance if the component has already been compiled.
           // If not, compile it.
 
         } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
@@ -41,27 +41,9 @@ class TemplateCompiler {
           // Jump this tokens (after "<_>").
           this.innerIndex = i + 3;
 
-          while ( this.currentChar !== SYNTAX_TOKENS.OpenTag ) {
-            this.currentChar = component.template[this.innerIndex];
-
-            if ( this.currentChar === ' ' ) {
-              continue;
-            }
-
-            this.currentProperty += this.currentChar;
-            ++this.innerIndex;
-          }
-
-          this.currentProperty += ____HTMLBlocksCompiler.currentProperty( component, this.currentProperty );
-
-          if ( !Utils.isNullOrUndefined( this.currentProperty ) ) {
-            this.compiledHtml += component[ this.currentProperty ];
-
-          } else {
-            throw new Error(
-              `Property "${splitedProperties.join( '.' )}" not defined in the component "${component.constructor.name}".`
-            );
-          }
+          const propResponse = ____HTMLBlocksCompiler.PROP( component, this.innerIndex );
+          this.innerIndex = propResponse[0];
+          this.compiledHtml += propResponse[1];
 
         // COMPLEX TAGS COMPILER.
         } else {
@@ -72,11 +54,11 @@ class TemplateCompiler {
 
           switch ( this.currentSymbol ) {
             case SYNTAX_TOKENS.For:
-              this.compiledHtml += ____HTMLBlocksCompiler.FOR( thisBlock );
+              // this.compiledHtml += ____HTMLBlocksCompiler.FOR( thisBlock );
               break;
 
             case SYNTAX_TOKENS.If:
-              this.compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
+              // this.compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
               break;
 
             default:
@@ -103,11 +85,11 @@ class TemplateCompiler {
     this.currentChar = '';
     this.currentSymbol = '';
     this.currentBlock = '';
-    this.currentProperty = '';
+
 
     if ( !startup.recompileComponents || startup.pages.length <= 0 ) {
       component.template = null;
-      component.____private.this.compiledHtml = compiledHtml;
+      component.____private.compiledHtml = compiledHtml;
     }
 
     return compiledHtml;
@@ -132,16 +114,17 @@ TemplateCompiler.prototype.____private = {
   getThisTag: ( template ) => {
     let tag = '';
 
-    while ( this.currentChar !== SYNTAX_TOKENS.CloseTag ) {
+    do {
       this.currentChar = template[this.innerIndex];
+      ++this.innerIndex;
 
       if ( this.currentChar === ' ' ) {
         continue;
       }
 
       tag += this.currentChar;
-      ++this.innerIndex;
-    }
+
+    } while ( this.currentChar !== SYNTAX_TOKENS.CloseTag );
 
     return tag;
   },

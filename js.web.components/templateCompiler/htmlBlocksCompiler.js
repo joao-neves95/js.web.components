@@ -4,23 +4,48 @@ class ____HTMLBlocksCompiler {
   constructor() { }
 
   /**
-   * 
+   * Returns [ innerIndex<number>, property<object> ]
    * @param { Component } component
-   * @param { string } propertyBlockContent The value inside "<_> propertyBlockContent </_>"
+   * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
    * 
    * @returns { object }
    */
-  static PROP( component, propertyBlockContent ) {
-    propertyBlockContent = propertyBlockContent.replace( /\s/g, '' );
-    // In case its a nested property (part of an object).
-    const splitedProperties = this.currentProperty.split( '.' );
+  static PROP( component, innerIndex ) {
+    let thisProperty = '';
+    let currentChar;
 
-    propertyBlockContent = component;
-    for ( let iProp; iProp < splitedProperties.length; ++iProp ) {
-      propertyBlockContent = propertyBlockContent[splitedProperties[i]];
+    do {
+      currentChar = component.template[innerIndex];
+      ++innerIndex;
+
+      if ( currentChar === ' ' ) {
+        continue;
+
+      } else {
+        thisProperty += currentChar;
+      }
+
+    } while ( component.template[innerIndex + 1] !== SYNTAX_TOKENS.OpenTag );
+
+    // Jump to after the "</_>"
+    innerIndex += 4;
+
+    thisProperty = thisProperty.replace( /\s/g, '' );
+    // In case its a nested property (part of an object).
+    const splitedProperties = thisProperty.split( '.' );
+
+    thisProperty = component;
+    for ( let i = 0; i < splitedProperties.length; ++i ) {
+      thisProperty = thisProperty[splitedProperties[i]];
     }
 
-    return propertyBlockContent;
+    if ( Utils.isNullOrUndefined( thisProperty ) ) {
+      throw new Error(
+        `Property "${splitedProperties.join( '.' )}" not defined in the component "${component.constructor.name}".`
+      );
+    }
+
+    return [innerIndex, thisProperty];
   }
 
   /** 
