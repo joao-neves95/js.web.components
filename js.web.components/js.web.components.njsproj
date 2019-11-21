@@ -29,6 +29,8 @@
     <Compile Include="constants\syntaxTokens.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="js.web.components.header.js" />
+    <Compile Include="jsDocReferences.js" />
     <Compile Include="models\compiledTemplateModel.js">
       <SubType>Code</SubType>
     </Compile>
