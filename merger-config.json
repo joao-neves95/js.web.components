@@ -8,8 +8,8 @@
 	},
 	"autoBuild": true,
 	"notifications": false,
-	"updateOnLaunch": true,
-	"lastUpdateCheck": "2019-11-21T13:41:38.000Z",
+	"updateOnLaunch": false,
+	"lastUpdateCheck": "2019-11-22T14:51:34.000Z",
 	"sourceFiles": [
 		{
 			"source": "D:\\joao9\\odrive\\ISTEC\\DEV\\js.web\\js.web.components\\js.web.components.header.js",
