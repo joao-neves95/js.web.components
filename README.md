@@ -7,6 +7,18 @@
 js.web only supports the main browsers (I.e.: Firefox, Chrome, Opera, Safari).<br>
 js.web does not support Internet Explorer.
 
+## Specification
+
+### Component Property Rendering: 
+`<_>[property-to-reder]</_>`
+
+Example:
+```
+<div class="container">
+    <h1> <_> title </_> </h1>
+</div>
+```
+
 ## Features Roadmap:
 - [x] Implement component property rendering
 - [ ] Implement for loop with component property rendering from an array
