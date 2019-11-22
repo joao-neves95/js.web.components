@@ -49,16 +49,19 @@ class TemplateCompiler {
         } else {
           // The index after in "<_".
           this.innerIndex = i + 2;
-          this.currentSymbol = this.____private.getThisTag( component.template );
+          const tagResponse = ____HTMLBlocksCompiler.getThisTag( component.template, this.innerIndex );
+          this.innerIndex = tagResponse[0];
+          this.currentSymbol = tagResponse[1];
           this.currentBlock = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template );
-
-          console.log( 'this.currentSymbol:', this.currentSymbol );
-          console.log( 'this.currentBlock:', this.currentBlock );
 
           switch ( this.currentSymbol ) {
             case SYNTAX_TOKENS.For:
               console.log( 'FOR block' );
-              // this.compiledHtml += ____HTMLBlocksCompiler.FOR( thisBlock );
+              const forBlockResponse = ____HTMLBlocksCompiler.FOR( this.currentBlock );
+              this.innerIndex += this.currentBlock.length;
+
+              console.log( 'Iteration Hook:', forBlockResponse[0] );
+              console.log( 'Template to Repeat:', forBlockResponse[1] );
               break;
 
             case SYNTAX_TOKENS.If:
@@ -110,61 +113,44 @@ class TemplateCompiler {
   static get ____private() {
     return {
       /**
-       * Make sure to call this after "<_ or </_"
-       * @param { string } template
-       */
-      getThisTag: ( template ) => {
-        let tag = '';
-
-        do {
-          this.currentChar = template[this.innerIndex];
-          ++this.innerIndex;
-
-          tag += this.currentChar;
-
-        } while ( this.currentChar !== SYNTAX_TOKENS.CloseTag && this.currentChar !== ' ' && this.currentChar !== '=' );
-
-        return tag.substring( 0, tag.length - 1 );
-      },
-
-      /**
        * Get the value inside a complex template tag.
        * Make sure to call this in the index of "<" in "<_".
        * @param { string } template
        */
       getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template ) => {
         let thisBlock = '';
+        let tagResponse;
         let closeToken = null;
 
         let blockEnded = false;
         while ( !blockEnded ) {
-          thisBlock += template[this.innerIndex];
-          ++this.innerIndex;
 
           if ( template[this.innerIndex] === SYNTAX_TOKENS.OpenTag &&
                template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
-               template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken
+               template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken &&
+               template[this.innerIndex + 3] !== SYNTAX_TOKENS.CloseTag
           ) {
             this.innerIndex += 3;
-            closeToken = TemplateCompiler.____private.getThisTag( template );
+
+            tagResponse = ____HTMLBlocksCompiler.getThisTag( template, this.innerIndex );
+            closeToken = tagResponse[1];
 
             if ( closeToken === TAG_SYNTAX_TOKEN ) {
               blockEnded = true;
-
-            } else
-              // -3: revert close token jump
-              // closeToken.length + 1: revert TemplateCompiler.____private.getThisTag inner jumps.
-              this.innerIndex -= 3 - closeToken.length + 1;
+              this.innerIndex = tagResponse[0];
             }
+
+          } else {
+            thisBlock += template[this.innerIndex];
+            ++this.innerIndex;
           }
+        }
 
         return thisBlock;
       }
-
     };
   }
 
   // #endregion PRIVATE METHODS
 
 } // end of class
-
