@@ -9,7 +9,8 @@ js.web does not support Internet Explorer.
 
 ## Features Roadmap:
 - [x] Implement component property rendering
-- [ ] Implement for loop with component property rendering
+- [ ] Implement for loop with component property rendering from an array
+- [ ] Implement for loop with component property rendering from an object
 - [ ] Implement two-way data binding
 - [ ] Implement support for having sub-components (render components inside other components)
 
