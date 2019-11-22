@@ -777,7 +777,10 @@ class TemplateCompiler {
           // The index after in "<_".
           this.innerIndex = i + 2;
           this.currentSymbol = this.____private.getThisTag( component.template );
-          this.currentBlock = this.____private.getThisComplexBlock( component.template );
+          this.currentBlock = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template );
+
+          console.log( 'this.currentSymbol:', this.currentSymbol );
+          console.log( 'this.currentBlock:', this.currentBlock );
 
           switch ( this.currentSymbol ) {
             case SYNTAX_TOKENS.For:
@@ -856,29 +859,33 @@ class TemplateCompiler {
        * Make sure to call this in the index of "<" in "<_".
        * @param { string } template
        */
-      getThisComplexBlock: ( template ) => {
+      getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template ) => {
         let thisBlock = '';
-        let closeToken = '';
+        let closeToken = null;
 
         let blockEnded = false;
         while ( !blockEnded ) {
-          this.currentChar = template[this.innerIndex];
-          thisBlock += this.currentChar;
+          thisBlock += template[this.innerIndex];
           ++this.innerIndex;
 
-          if ( this.currentChar === SYNTAX_TOKENS.OpenTag &&
-            component.template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
-            component.template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken
+          if ( template[this.innerIndex] === SYNTAX_TOKENS.OpenTag &&
+               template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
+               template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken
           ) {
-            closeToken = this.getThisTag( component.template );
+            this.innerIndex += 3;
+            closeToken = TemplateCompiler.____private.getThisTag( template );
 
-            if ( closeToken === SYNTAX_TOKENS.For ) {
+            if ( closeToken === TAG_SYNTAX_TOKEN ) {
               blockEnded = true;
+
+            } else
+              // -3: revert close token jump
+              // closeToken.length + 1: revert TemplateCompiler.____private.getThisTag inner jumps.
+              this.innerIndex -= 3 - closeToken.length + 1;
             }
           }
 
-          return thisBlock;
-        }
+        return thisBlock;
       }
 
     };
