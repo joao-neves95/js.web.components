@@ -1,11 +1,15 @@
 # js.web.components
 
+---
+
 ## Observations:
 
 **All of this can and will change in the future.**
 
 js.web only supports the main browsers (I.e.: Firefox, Chrome, Opera, Safari).<br>
 js.web does not support Internet Explorer.
+
+---
 
 ## Specification
 
@@ -14,12 +18,21 @@ js.web does not support Internet Explorer.
 
 #### Example:
 
+Template:
+``` html
+const testTemplate = `
+<div class="container">
+    <h1> <_> title </_> </h1>
+</div>
+`;
+```
+
 Component:
 ``` js
 class TestComponent extends Component {
 
   constructor() {
-    super( 'app-test', <template: string>, [''] );
+    super( 'app-test', testTemplate, [''] );
 
     this.title = 'My Website';
   }
@@ -27,24 +40,27 @@ class TestComponent extends Component {
 }
 ```
 
-Template:
-``` html
-<div class="container">
-    <h1> <_> title </_> </h1>
-</div>
-```
-
 ### Component State Property Rendering with Binding:
 `<_> state.[property-to-reder] </_>`
 
 #### Example:
+
+Template:
+``` html
+const testTemplate = `
+<div class="container">
+    <!-- DATA BINDING -->
+    <p> <_> state.myName </_> </p>
+</div>
+`;
+```
 
 Component:
 ``` js
 class TestComponent extends Component {
 
   constructor() {
-    super( 'app-test', <template: string>, [''] );
+    super( 'app-test', testTemplate, [''] );
 
     this.state = this.createState( {
       myName: 'João Neves'
@@ -54,24 +70,29 @@ class TestComponent extends Component {
 }
 ```
 
-Template:
-``` html
-<div class="container">
-    <!-- DATA BINDING -->
-    <p> <_> state.myName </_> </p>
-</div>
-```
-
 ### Component Property Iteration Rendering:
 
 #### Example:
+
+Template:
+``` html
+const nameListTemplate = `
+<div class="container">
+    <ul>
+        <_for let="person of names">
+            <li> <_>person</_> </li>
+        </_for>
+    </ul>
+</div>
+`;
+```
 
 Component:
 ``` js
 class NameListComponent extends Component {
 
   constructor() {
-    super( 'app-nameList', <template: string>, [''] );
+    super( 'app-nameList', nameListTemplate, [''] );
 
     this.names = ['John Doe', 'Oliver Hoe', 'Fiona Silva'];
 
@@ -80,17 +101,7 @@ class NameListComponent extends Component {
 }
 ```
 
-Template:
-``` html
-<div class="container">
-    <ul>
-        <_for let="person of names">
-            <li> <_>person</_> </li>
-        </_for>
-    </ul>
-</div>
-```
-
+---
 
 ## Features Roadmap:
 - [x] Implement component property rendering
@@ -101,6 +112,8 @@ Template:
 - [ ] Implement component method calls from template events
 - [ ] Implement if statement template
 - [ ] Implement support for having sub-components (render components inside other components)
+
+---
 
 ## Motivation:
 My teacher told the class to make a project using HTML, CSS and JQuery.<br/>
