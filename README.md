@@ -10,12 +10,55 @@ js.web does not support Internet Explorer.
 ## Specification
 
 ### Component Property Rendering: 
-`<_>[property-to-reder]</_>`
+`<_> [property-to-reder] </_>`
 
-Example:
+#### Example:
+
+Component:
+```
+class TestComponent extends Component {
+
+  constructor() {
+    super( 'app-test', <template: string>, [''] );
+
+    this.title = 'My Website';
+  }
+
+}
+```
+
+Template:
 ```
 <div class="container">
     <h1> <_> title </_> </h1>
+</div>
+```
+
+### Component State Property Rendering with Binding:
+`<_> state.[property-to-reder] </_>`
+
+#### Example:
+
+Component:
+```
+class TestComponent extends Component {
+
+  constructor() {
+    super( 'app-test', <template: string>, [''] );
+
+    this.state = this.createState( {
+      myName: 'João Neves'
+    } );
+  }
+
+}
+```
+
+Template:
+```
+<div class="container">
+    <!-- DATA BINDING -->
+    <p> <_> state.myName </_> </p>
 </div>
 ```
 
