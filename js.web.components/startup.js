@@ -58,7 +58,7 @@ class Startup {
          * @param { Component } component
          */
         ( component ) => {
-          thisCompiledHTML = TemplateCompiler.compile( this, component );
+          thisCompiledHTML = TemplateCompiler.compile( component );
 
           Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
             elem.innerHTML = thisCompiledHTML;

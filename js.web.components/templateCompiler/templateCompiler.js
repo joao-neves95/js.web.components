@@ -13,9 +13,8 @@ class TemplateCompiler {
    * 
    * @return { string } The compiled HTML
    */
-  static compile( startup, component ) {
-    this.compiledHtml = '';
-
+  static compile( component ) {
+    let compiledHtml = '';
     let innerIndex = 0;
     let currentChar = '';
     let currentSymbol = '';
@@ -40,7 +39,7 @@ class TemplateCompiler {
 
           const propResponse = ____HTMLBlocksCompiler.PROP( component, innerIndex );
           innerIndex = propResponse[0];
-          this.compiledHtml += propResponse[1];
+          compiledHtml += propResponse[1];
 
         // COMPLEX TAGS COMPILER.
         } else {
@@ -52,18 +51,49 @@ class TemplateCompiler {
 
           switch ( currentSymbol ) {
             case SYNTAX_TOKENS.For:
-              console.log( 'FOR block' );
-              const complexBlockResponse = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template, innerIndex );
-              currentBlock = complexBlockResponse[1];
-              innerIndex = complexBlockResponse[0];
-              const forBlockResponse = ____HTMLBlocksCompiler.FOR( currentBlock );
+              let blockResponse = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template, innerIndex );
+              currentBlock = blockResponse[1];
+              innerIndex = blockResponse[0];
 
-              console.log( 'Iteration Hook:', forBlockResponse[0] );
-              console.log( 'Template to Repeat:', forBlockResponse[1] );
+              //                          (0)      (1)         (2)
+              // (0) Iteration hook: " [variable] of/in [componentProperty] "
+              // (1) Template to repeate example: " <li> <_> [variable] </_> </li> "
+              blockResponse = ____HTMLBlocksCompiler.FOR( currentBlock );
+              blockResponse[0] = blockResponse[0].split( ' ' );
+
+              // TODO: Check for every built-in property of Component.
+              if ( blockResponse[0][0] === 'name' ) {
+                throw new Error(
+                  `Atempt to use a variable name equal to a built in Component property ("${blockResponse[0][0]}") in the template of the component "${component.name}": "${blockResponse[0].join( ' ' )}"`
+                );
+              }
+
+              let innerComponent = component;
+              innerComponent.template = blockResponse[0][2] + '<';
+              const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0 )[1];
+
+              switch ( blockResponse[0][1] ) {
+                case 'of':
+                  innerComponent.template = blockResponse[1];
+
+                  for ( const val of propValues ) {
+                    innerComponent[blockResponse[0][0]] = val;
+                    compiledHtml += TemplateCompiler.compile( innerComponent );
+                  }
+
+                  break;
+
+                case 'in':
+                  throw new Error( '"for in" loop NOT IMPLEMENTED.' );
+
+                default:
+                  throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
+              }
+
               break;
 
             case SYNTAX_TOKENS.If:
-              // this.compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
+              // compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
               break;
 
             default:
@@ -78,24 +108,10 @@ class TemplateCompiler {
 
       } else {
         // Normal HTML.
-        this.compiledHtml += currentChar;
+        compiledHtml += currentChar;
       }
 
     } // end of FOR.
-
-    // This is because, in the future, this class will not be static.
-    const compiledHtml = this.compiledHtml;
-    this.compiledHtml = '';
-    innerIndex = 0;
-    currentChar = '';
-    currentSymbol = '';
-    currentBlock = '';
-
-
-    if ( !startup.recompileComponents || startup.pages.length <= 0 ) {
-      component.template = null;
-      component.____private.compiledHtml = compiledHtml;
-    }
 
     return compiledHtml;
   }
