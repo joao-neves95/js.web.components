@@ -829,7 +829,13 @@ class TemplateCompiler {
 
       if ( this.currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
-        if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+        // TODO: Change to acomodate the new syntax: "app-<someName>&"
+        if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
+          this.innerIndex = i + 2;
+          // TODO: Check in the startup instance if the component has already been compiled.
+          // If not, compile it.
+
+        } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
           // VALUES RENDERER.
           // TODO: (VALUES RENDERER) Add property binding.
           // Jump this tokens (after "<_>").
@@ -1021,7 +1027,7 @@ class Startup {
       // TODO: One page build logic.
     }
 
-    return this;
+    window.startup = this;
   }
 
 }
