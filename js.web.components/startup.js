@@ -6,6 +6,7 @@ class Startup {
 
     this.recompileComponents = false;
 
+    // TODO: Change from list to Dictionary.
     /** @type List<Component> */
     this.components = new List();
 
@@ -36,6 +37,7 @@ class Startup {
     for ( let i = 0; i < components.length; ++i ) {
       this.components.add( components[i] );
     }
+    return this;
   }
 
   /**
@@ -49,18 +51,25 @@ class Startup {
   build() {
     // Single page.
     if ( this.pages.length <= 0 ) {
-      this.components.forEach( ( component ) => {
-        const compiledHtml = TemplateCompiler.compile( this, component );
+      this.components.forEach(
+        /** 
+         * @param { Component } component
+         */
+        ( component ) => {
+          const compiledHtml = TemplateCompiler.compile( this, component );
 
-        Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
-          elem.innerHTML = compiledHtml;
+          Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
+            elem.innerHTML = compiledHtml;
         } );
-      } );
+        }
+      );
 
     // One page app.
     } else {
       // TODO: One page build logic.
     }
+
+    return this;
   }
 
 }
