@@ -38,18 +38,15 @@ class ____HTMLBlocksCompiler {
     let thisProperty = '';
     let currentChar;
 
-    do {
+    while ( component.template[innerIndex] !== SYNTAX_TOKENS.OpenTag ) {
       currentChar = component.template[innerIndex];
-      ++innerIndex;
 
-      if ( currentChar === ' ' ) {
-        continue;
-
-      } else {
+      if ( currentChar !== ' ' ) {
         thisProperty += currentChar;
       }
 
-    } while ( component.template[innerIndex + 1] !== SYNTAX_TOKENS.OpenTag );
+      ++innerIndex;
+    }
 
     // Jump to after the "</_>"
     innerIndex += 4;
@@ -86,7 +83,6 @@ class ____HTMLBlocksCompiler {
    * @return { [string, string] }
    */
   static FOR( forBlock ) {
-    console.log( 'forBlock:', forBlock)
     let iterationHook = '';
 
     let i;
