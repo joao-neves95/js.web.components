@@ -964,9 +964,9 @@ class Startup {
 
     this.recompileComponents = false;
 
-    // TODO: Change from list to Dictionary.
-    /** @type List<Component> */
-    this.components = new List();
+    /** type Dictionary<Component>
+     *  @type Dictionary<Component> */
+    this.components = new Dictionary( true );
 
     /** @type { Page[] } */
     this.pages = [];
@@ -983,7 +983,7 @@ class Startup {
    * @param { Component } component
    */
   addComponent( component ) {
-    this.components.add( component );
+    this.components.add( component.name, component );
     return this;
   }
 
@@ -993,7 +993,7 @@ class Startup {
    */
   addComponents( components ) {
     for ( let i = 0; i < components.length; ++i ) {
-      this.components.add( components[i] );
+      this.components.add( components[i].name, components[i] );
     }
     return this;
   }
@@ -1009,15 +1009,17 @@ class Startup {
   build() {
     // Single page.
     if ( this.pages.length <= 0 ) {
-      this.components.forEach(
+      let thisCompiledHTML;
+
+      this.components.forEachValue(
         /** 
          * @param { Component } component
          */
         ( component ) => {
-          const compiledHtml = TemplateCompiler.compile( this, component );
+          thisCompiledHTML = TemplateCompiler.compile( this, component );
 
           Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
-            elem.innerHTML = compiledHtml;
+            elem.innerHTML = thisCompiledHTML;
         } );
         }
       );
