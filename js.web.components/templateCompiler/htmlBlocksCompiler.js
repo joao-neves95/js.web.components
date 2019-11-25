@@ -4,9 +4,12 @@ class ____HTMLBlocksCompiler {
   constructor() { }
 
   /**
-   * Returns [ innerIndex<number>, tag<string> ]
    * Make sure to call this after "<_ or </_"
+   * Returns [ innerIndex<number>, tag<string> ]
+   * 
    * @param { string } template
+   * 
+   * @returns { [number, string] }
    */
   static getThisTag( template, innerIndex ) {
     let currentChar = '';
@@ -29,7 +32,7 @@ class ____HTMLBlocksCompiler {
    * @param { Component } component
    * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
    * 
-   * @returns { object }
+   * @returns { [number, object] }
    */
   static PROP( component, innerIndex ) {
     let thisProperty = '';
@@ -79,6 +82,8 @@ class ____HTMLBlocksCompiler {
    *  Returns [iterationHook<string>, templateToRepeat<string>]
    *  
    * @param { string } forBlock
+   * 
+   * @return { [string, string] }
    */
   static FOR( forBlock ) {
     console.log( 'forBlock:', forBlock)
