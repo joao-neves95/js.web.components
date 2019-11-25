@@ -5,6 +5,10 @@ class HeaderComponent extends Component {
     super( 'app-header', headerTemplate, [''] );
 
     this.title = 'My Website';
+
+    this.state = this.createState( {
+      myName: 'João Neves'
+    } );
   }
 
 }

@@ -1,0 +1,1 @@
+﻿/// <reference path="./dom.js" />
