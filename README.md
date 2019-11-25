@@ -112,6 +112,8 @@ class NameListComponent extends Component {
 - [ ] Implement component method calls from template events
 - [ ] Implement if statement template
 - [ ] Implement support for having sub-components (render components inside other components)
+- [ ] Implement multiple pages
+- [ ] Optimize (space and time)
 
 ---
 
