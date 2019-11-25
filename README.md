@@ -9,13 +9,13 @@ js.web does not support Internet Explorer.
 
 ## Specification
 
-### Component Property Rendering: 
+### Component Property Rendering:
 `<_> [property-to-reder] </_>`
 
 #### Example:
 
 Component:
-```
+``` js
 class TestComponent extends Component {
 
   constructor() {
@@ -28,7 +28,7 @@ class TestComponent extends Component {
 ```
 
 Template:
-```
+``` html
 <div class="container">
     <h1> <_> title </_> </h1>
 </div>
@@ -40,7 +40,7 @@ Template:
 #### Example:
 
 Component:
-```
+``` js
 class TestComponent extends Component {
 
   constructor() {
@@ -55,12 +55,42 @@ class TestComponent extends Component {
 ```
 
 Template:
-```
+``` html
 <div class="container">
     <!-- DATA BINDING -->
     <p> <_> state.myName </_> </p>
 </div>
 ```
+
+### Component Property Iteration Rendering:
+
+#### Example:
+
+Component:
+``` js
+class NameListComponent extends Component {
+
+  constructor() {
+    super( 'app-nameList', <template: string>, [''] );
+
+    this.names = ['John Doe', 'Oliver Hoe', 'Fiona Silva'];
+
+  }
+
+}
+```
+
+Template:
+``` html
+<div class="container">
+    <ul>
+        <_for let="person of names">
+            <li> <_>person</_> </li>
+        </_for>
+    </ul>
+</div>
+```
+
 
 ## Features Roadmap:
 - [x] Implement component property rendering
