@@ -1,6 +1,6 @@
 'use strict';
 
-window.startup = new Startup()
+new Startup()
   .addComponent( new HeaderComponent() )
   .addComponent( new NameListComponent() )
   .build();

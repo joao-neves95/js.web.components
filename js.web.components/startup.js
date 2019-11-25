@@ -69,7 +69,7 @@ class Startup {
       // TODO: One page build logic.
     }
 
-    return this;
+    window.startup = this;
   }
 
 }
