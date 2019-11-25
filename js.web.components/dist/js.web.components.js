@@ -589,11 +589,14 @@ class Component {
       throw new Error( 'You must provide a component name.' );
     }
 
+    // TODO: Add an underscore to internal properties.
     this.name = name;
 
     this.template = template;
 
     this.stylesheet = stylesheet;
+
+    this.state = null;
 
     this.____private = {
       /** 
@@ -603,6 +606,19 @@ class Component {
       compiledHtml: null
     };
 
+  }
+
+  createState = ( stateObj ) => {
+    const thisComponent = this;
+
+    return new Proxy( stateObj, {
+      set( target, property, value ) {
+        target[property] = value;
+        document.querySelector( `[data-component="${thisComponent.name}"][data-binding="${property}"]` ).innerHTML = thisComponent.state[property];
+
+        return true;
+      }
+    } );
   }
 
 }
@@ -685,7 +701,8 @@ class ____HTMLBlocksCompiler {
   }
 
   /**
-   * Returns [ innerIndex<number>, property<object> ]
+   * Returns [ innerIndex<number>, property<object>,  ]
+   * 
    * @param { Component } component
    * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
    * 
@@ -714,6 +731,7 @@ class ____HTMLBlocksCompiler {
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
     const splitedProperties = thisProperty.split( '.' );
+    const isPropertyBinding = splitedProperties[0] === 'state';
 
     thisProperty = component;
     for ( let i = 0; i < splitedProperties.length; ++i ) {
@@ -724,6 +742,10 @@ class ____HTMLBlocksCompiler {
       throw new Error(
         `Property "${splitedProperties.join( '.' )}" not defined in the component "${component.constructor.name}".`
       );
+    }
+
+    if ( isPropertyBinding ) {
+      thisProperty = `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}"> ${thisProperty} </span>`;
     }
 
     return [innerIndex, thisProperty];
@@ -807,13 +829,7 @@ class TemplateCompiler {
 
       if ( this.currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
-        // TODO: Change to acomodate the new syntax: "app-<someName>&"
-        if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
-          this.innerIndex = i + 2;
-          // TODO: Check in the startup instance if the component has already been compiled.
-          // If not, compile it.
-
-        } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+        if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
           // VALUES RENDERER.
           // TODO: (VALUES RENDERER) Add property binding.
           // Jump this tokens (after "<_>").
@@ -942,6 +958,7 @@ class Startup {
 
     this.recompileComponents = false;
 
+    // TODO: Change from list to Dictionary.
     /** @type List<Component> */
     this.components = new List();
 
@@ -972,6 +989,7 @@ class Startup {
     for ( let i = 0; i < components.length; ++i ) {
       this.components.add( components[i] );
     }
+    return this;
   }
 
   /**
@@ -985,18 +1003,25 @@ class Startup {
   build() {
     // Single page.
     if ( this.pages.length <= 0 ) {
-      this.components.forEach( ( component ) => {
-        const compiledHtml = TemplateCompiler.compile( this, component );
+      this.components.forEach(
+        /** 
+         * @param { Component } component
+         */
+        ( component ) => {
+          const compiledHtml = TemplateCompiler.compile( this, component );
 
-        Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
-          elem.innerHTML = compiledHtml;
+          Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
+            elem.innerHTML = compiledHtml;
         } );
-      } );
+        }
+      );
 
     // One page app.
     } else {
       // TODO: One page build logic.
     }
+
+    return this;
   }
 
 }
