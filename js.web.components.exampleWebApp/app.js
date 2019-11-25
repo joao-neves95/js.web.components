@@ -5,15 +5,11 @@ new Startup()
   .addComponent( new NameListComponent() )
   .build();
 
-startup.components.forEach(
-  /**
-   * @type { Component } component
+/**
+   * @type { Component | false } component
    */
-  ( component ) => {
-    // State property binding test.
-    if ( component.name === 'app-header' ) {
-      component.state.myName = 'SHIVAYL';
-      return;
-    }
-  }
-);
+const headerComponent = startup.components.getByKey( 'app-header' );
+
+if ( headerComponent ) {
+  headerComponent.state.myName = 'SHIVAYL';
+}
