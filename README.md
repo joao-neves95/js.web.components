@@ -65,7 +65,7 @@ Template:
 ## Features Roadmap:
 - [x] Implement component property rendering
 - [x] Implement component state property data binding
-- [ ] Implement for loop template with component property rendering from an array
+- [x] Implement for loop template with component property rendering from an array
 - [ ] Implement for loop template with component property rendering from an object
 - [ ] Implement component state property data binding for complex templates like for loops
 - [ ] Implement if statement template
