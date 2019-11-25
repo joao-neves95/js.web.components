@@ -1,15 +1,7 @@
 // At the end refactor all of this.
 
 class TemplateCompiler {
-  constructor() {
-
-    this.compiledHtml;
-
-    this.innerIndex;
-    this.currentChar;
-    this.currentSymbol;
-    this.currentBlock;
-  }
+  constructor() { }
 
   // #region COMPILE
 
@@ -24,14 +16,19 @@ class TemplateCompiler {
   static compile( startup, component ) {
     this.compiledHtml = '';
 
-    for ( let i = 0; i < component.template.length; ++i ) {
-      this.currentChar = component.template[i];
+    let innerIndex = 0;
+    let currentChar = '';
+    let currentSymbol = '';
+    let currentBlock = '';
 
-      if ( this.currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
+    for ( let i = 0; i < component.template.length; ++i ) {
+      currentChar = component.template[i];
+
+      if ( currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
         // TODO: Change to acomodate the new syntax: "app-<someName>&"
         if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
-          this.innerIndex = i + 2;
+          innerIndex = i + 2;
           // TODO: Check in the startup instance if the component has already been compiled.
           // If not, compile it.
 
@@ -39,26 +36,27 @@ class TemplateCompiler {
           // VALUES RENDERER.
           // TODO: (VALUES RENDERER) Add property binding.
           // Jump this tokens (after "<_>").
-          this.innerIndex = i + 3;
+          innerIndex = i + 3;
 
-          const propResponse = ____HTMLBlocksCompiler.PROP( component, this.innerIndex );
-          this.innerIndex = propResponse[0];
+          const propResponse = ____HTMLBlocksCompiler.PROP( component, innerIndex );
+          innerIndex = propResponse[0];
           this.compiledHtml += propResponse[1];
 
         // COMPLEX TAGS COMPILER.
         } else {
           // The index after in "<_".
-          this.innerIndex = i + 2;
-          const tagResponse = ____HTMLBlocksCompiler.getThisTag( component.template, this.innerIndex );
-          this.innerIndex = tagResponse[0];
-          this.currentSymbol = tagResponse[1];
-          this.currentBlock = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template );
+          innerIndex = i + 2;
+          const tagResponse = ____HTMLBlocksCompiler.getThisTag( component.template, innerIndex );
+          innerIndex = tagResponse[0];
+          currentSymbol = tagResponse[1];
 
-          switch ( this.currentSymbol ) {
+          switch ( currentSymbol ) {
             case SYNTAX_TOKENS.For:
               console.log( 'FOR block' );
-              const forBlockResponse = ____HTMLBlocksCompiler.FOR( this.currentBlock );
-              this.innerIndex += this.currentBlock.length;
+              const complexBlockResponse = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template, innerIndex );
+              currentBlock = complexBlockResponse[1];
+              innerIndex = complexBlockResponse[0];
+              const forBlockResponse = ____HTMLBlocksCompiler.FOR( currentBlock );
 
               console.log( 'Iteration Hook:', forBlockResponse[0] );
               console.log( 'Template to Repeat:', forBlockResponse[1] );
@@ -70,17 +68,17 @@ class TemplateCompiler {
 
             default:
               throw new Error(
-                `Unknown symbol "${SYNTAX_TOKENS.OpenTag}${SYNTAX_TOKENS.SyntaxTagToken}${this.currentSymbol}" on the template of the component "${component.constructor.name}".`
+                `Unknown symbol "${SYNTAX_TOKENS.OpenTag}${SYNTAX_TOKENS.SyntaxTagToken}${currentSymbol}" on the template of the component "${component.constructor.name}".`
               );
           }
         }
 
         // Advance forward.
-        i = this.innerIndex;
+        i = innerIndex;
 
       } else {
         // Normal HTML.
-        this.compiledHtml += this.currentChar;
+        this.compiledHtml += currentChar;
       }
 
     } // end of FOR.
@@ -88,10 +86,10 @@ class TemplateCompiler {
     // This is because, in the future, this class will not be static.
     const compiledHtml = this.compiledHtml;
     this.compiledHtml = '';
-    this.innerIndex = 0;
-    this.currentChar = '';
-    this.currentSymbol = '';
-    this.currentBlock = '';
+    innerIndex = 0;
+    currentChar = '';
+    currentSymbol = '';
+    currentBlock = '';
 
 
     if ( !startup.recompileComponents || startup.pages.length <= 0 ) {
@@ -108,16 +106,21 @@ class TemplateCompiler {
 
   /**
    * Internal methods.
-   * This methods use and change "this.currentChar" and "this.innerIndex".
+   * This methods use and change "currentChar" and "innerIndex".
    */
   static get ____private() {
     return {
       /**
        * Get the value inside a complex template tag.
        * Make sure to call this in the index of "<" in "<_".
+       * 
+       * Returns [ innerIndex: number, block: string ]
+       * 
        * @param { string } template
+       * 
+       * @return { [number, string] }
        */
-      getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template ) => {
+      getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template, innerIndex ) => {
         let thisBlock = '';
         let tagResponse;
         let closeToken = null;
@@ -125,28 +128,28 @@ class TemplateCompiler {
         let blockEnded = false;
         while ( !blockEnded ) {
 
-          if ( template[this.innerIndex] === SYNTAX_TOKENS.OpenTag &&
-               template[this.innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
-               template[this.innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken &&
-               template[this.innerIndex + 3] !== SYNTAX_TOKENS.CloseTag
+          if ( template[innerIndex] === SYNTAX_TOKENS.OpenTag &&
+               template[innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
+               template[innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken &&
+               template[innerIndex + 3] !== SYNTAX_TOKENS.CloseTag
           ) {
-            this.innerIndex += 3;
+            innerIndex += 3;
 
-            tagResponse = ____HTMLBlocksCompiler.getThisTag( template, this.innerIndex );
+            tagResponse = ____HTMLBlocksCompiler.getThisTag( template, innerIndex );
             closeToken = tagResponse[1];
 
             if ( closeToken === TAG_SYNTAX_TOKEN ) {
               blockEnded = true;
-              this.innerIndex = tagResponse[0];
+              innerIndex = tagResponse[0];
             }
 
           } else {
-            thisBlock += template[this.innerIndex];
-            ++this.innerIndex;
+            thisBlock += template[innerIndex];
+            ++innerIndex;
           }
         }
 
-        return thisBlock;
+        return [innerIndex, thisBlock];
       }
     };
   }
