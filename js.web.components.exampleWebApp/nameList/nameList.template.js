@@ -2,8 +2,8 @@
 const nameListTemplate = `
 <div class="container">
     <ul>
-        <_for let="name of names">
-            <li> <_>name</_> </li>
+        <_for let="person of names">
+            <li> <_>person</_> </li>
         </_for>
     </ul>
 </div>
