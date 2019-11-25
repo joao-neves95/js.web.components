@@ -24,7 +24,8 @@ class ____HTMLBlocksCompiler {
   }
 
   /**
-   * Returns [ innerIndex<number>, property<object> ]
+   * Returns [ innerIndex<number>, property<object>,  ]
+   * 
    * @param { Component } component
    * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
    * 
@@ -53,6 +54,7 @@ class ____HTMLBlocksCompiler {
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
     const splitedProperties = thisProperty.split( '.' );
+    const isPropertyBinding = splitedProperties[0] === 'state';
 
     thisProperty = component;
     for ( let i = 0; i < splitedProperties.length; ++i ) {
@@ -63,6 +65,10 @@ class ____HTMLBlocksCompiler {
       throw new Error(
         `Property "${splitedProperties.join( '.' )}" not defined in the component "${component.constructor.name}".`
       );
+    }
+
+    if ( isPropertyBinding ) {
+      thisProperty = `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}"> ${thisProperty} </span>`;
     }
 
     return [innerIndex, thisProperty];
