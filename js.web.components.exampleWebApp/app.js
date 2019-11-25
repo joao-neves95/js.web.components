@@ -13,6 +13,7 @@ startup.components.forEach(
     // State property binding test.
     if ( component.name === 'app-header' ) {
       component.state.myName = 'SHIVAYL';
+      return;
     }
   }
 );
