@@ -21,10 +21,11 @@ Example:
 
 ## Features Roadmap:
 - [x] Implement component property rendering
-- [ ] Implement for loop with component property rendering from an array
-- [ ] Implement two-way data binding
-- [ ] Implement for loop with component property rendering from an object
-- [ ] Implement if statement
+- [x] Implement component state property data binding
+- [ ] Implement for loop template with component property rendering from an array
+- [ ] Implement for loop template with component property rendering from an object
+- [ ] Implement component state property data binding for complex templates like for loops
+- [ ] Implement if statement template
 - [ ] Implement support for having sub-components (render components inside other components)
 
 ## Motivation:
