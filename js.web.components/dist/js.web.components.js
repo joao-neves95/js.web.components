@@ -851,6 +851,9 @@ class TemplateCompiler {
           currentSymbol = tagResponse[1];
 
           switch ( currentSymbol ) {
+
+            // #region FOR
+
             case SYNTAX_TOKENS.For:
               let blockResponse = this.____private.getThisComplexBlock( SYNTAX_TOKENS.For, component.template, innerIndex );
               currentBlock = blockResponse[1];
@@ -869,7 +872,7 @@ class TemplateCompiler {
                 );
               }
 
-              let innerComponent = component;
+              let innerComponent = Object.create( component );
               innerComponent.template = blockResponse[0][2] + '<';
               const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0 )[1];
 
@@ -892,6 +895,8 @@ class TemplateCompiler {
               }
 
               break;
+
+            // #endregion FOR
 
             case SYNTAX_TOKENS.If:
               // compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
