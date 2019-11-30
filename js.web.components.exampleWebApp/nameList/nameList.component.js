@@ -6,6 +6,9 @@ class NameListComponent extends Component {
 
     this.names = ['John Doe', 'Oliver Hoe', 'Fiona Silva'];
 
+    this.state = {
+      todoItems: this.createState( ['Study', 'Learn design patterns', 'Learn data structures'], 'todoItems' )
+    };
   }
 
 }
