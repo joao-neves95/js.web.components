@@ -101,16 +101,49 @@ class NameListComponent extends Component {
 }
 ```
 
+### Component Property Iteration Rendering with Property Binding:
+
+#### Example:
+
+Template:
+``` html
+const todoListTemplate = `
+<div class="container">
+    <ul>
+        <_for let="todoItem of state.todoItems">
+            <li> <_> todoItem </_> </li>
+        </_for>
+    </ul>
+</div>
+`;
+```
+
+Component:
+``` js
+class TodoListComponent extends Component {
+
+  constructor() {
+    super( 'app-todoList', todoListTemplate, [''] );
+
+    this.state = {
+      todoItems: this.createState( ['Study', 'Learn design patterns', 'Learn data structures'], 'todoItems' )
+    };
+
+  }
+
+}
+```
+
 ---
 
 ## Features Roadmap:
 - [x] Implement component property rendering
 - [x] Implement component state property data binding
-- [x] Implement for loop template with component property rendering from an array
-- [ ] Implement for loop template with component property rendering from an object
-- [ ] Implement component state property data binding for complex templates like for loops
+- [x] Implement "for" loop template with component property rendering for arrays
+- [x] Implement component state property data binding for "for" loops
+- [ ] Implement "for" loop template with component property rendering for objects
 - [ ] Implement component method calls from template events
-- [ ] Implement if statement template
+- [ ] Implement "if" statement template
 - [ ] Implement support for having sub-components (render components inside other components)
 - [ ] Implement multiple pages
 - [ ] Optimize (space and time)

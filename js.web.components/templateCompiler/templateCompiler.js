@@ -10,7 +10,7 @@ class TemplateCompiler {
    *
    * @param { Startup } startup
    * @param { Component } component
-   * 
+   *
    * @return { string } The compiled HTML
    */
   static compile( component ) {
@@ -71,9 +71,18 @@ class TemplateCompiler {
                 );
               }
 
-              let innerComponent = Object.create( component );
+              /** @type { Component } */
+              let innerComponent = Object.assign( {}, component );
               innerComponent.template = blockResponse[0][2] + '<';
-              const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0 )[1];
+              const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0, true )[1];
+
+              const splitedProperties = blockResponse[0][2].split( '.' );
+              const hasPropertyBinding = splitedProperties[0] === 'state';
+
+              if ( hasPropertyBinding ) {
+                component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
+                compiledHtml += `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}">`;
+              }
 
               switch ( blockResponse[0][1] ) {
                 case 'of':
@@ -92,6 +101,8 @@ class TemplateCompiler {
                 default:
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
               }
+
+              compiledHtml += '</span>';
 
               break;
 
@@ -134,11 +145,11 @@ class TemplateCompiler {
       /**
        * Get the value inside a complex template tag.
        * Make sure to call this in the index of "<" in "<_".
-       * 
+       *
        * Returns [ innerIndex: number, block: string ]
-       * 
+       *
        * @param { string } template
-       * 
+       *
        * @return { [number, string] }
        */
       getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template, innerIndex ) => {
@@ -149,6 +160,7 @@ class TemplateCompiler {
         let blockEnded = false;
         while ( !blockEnded ) {
 
+          // "</_" && !"</_>"
           if ( template[innerIndex] === SYNTAX_TOKENS.OpenTag &&
                template[innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
                template[innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken &&
@@ -167,6 +179,14 @@ class TemplateCompiler {
           } else {
             thisBlock += template[innerIndex];
             ++innerIndex;
+          }
+
+          // Nothing found.
+          if ( !template[innerIndex] ) {
+            throw new Error( `Could not find the close tag of "<_${TAG_SYNTAX_TOKEN}>".
+Probably a syntax error.
+Template:
+"${template}"` );
           }
         }
 

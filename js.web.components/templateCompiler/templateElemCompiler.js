@@ -1,5 +1,5 @@
 ﻿
-/** 
+/**
  * For <template compilation>.
  * This is used when there's property binding.
  */
@@ -13,32 +13,30 @@ class ____TemplateElemCompiler {
     return '';
   }
 
-  /** 
+  /**
    * @param { string } forBlock
    */
-  static FOR( forBlock ) {
+  static FOR( componentName, propertyToBind, iterationHook, templateToRepeat ) {
 
-    /** @type { HTMLTemplateElement } */
-    const template = this.____private.createTemplate();
-    template.id = '';
-    template.innerHTML = '';
+    let encodedForBlock = encodeURI(
+      `<_for let="${iterationHook.join( ' ' )}">
+          ${ templateToRepeat}
+       </_for>
+      `
+    );
 
-    return '';
+    return `
+      <template data-component="${componentName}" data-binding="${propertyToBind}" data-token="${SYNTAX_TOKENS.For}">
+        ${encodedForBlock}
+      </template>
+    `;
   }
 
-  /** 
+  /**
    * @param { string } ifBlock
    */
   static IF( ifBlock ) {
     return '';
-  }
-
-}
-
-____TemplateElemCompiler.prototype.____private = {
-
-  createTemplate: () => {
-    return document.createElement( 'template' );
   }
 
 }

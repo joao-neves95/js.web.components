@@ -1,6 +1,6 @@
+// $import 'js.system.collections/dist/js.system.collections.js'
 // @import<<DIR './constants'
 // @import<<DIR './models'
-// $import 'js.system.collections/dist/js.system.collections.js'
 // @import './utils'
 // @import './component'
 // @import './page'
@@ -11,47 +11,6 @@
 // @import './startup'
 
 'use strict';
-
-
-const SYNTAX_TOKENS = Object.freeze( {
-
-  OpenTag: '<',
-  ClosingTag: '/',
-  CloseTag: '>',
-  SyntaxTagToken: '_',
-  ComponentRef: '&',
-
-  // Boolean()
-  Equal: '==',
-  EqualStrict: '===',
-  NotEqual: '!=',
-  NotEqualStrict: '!==',
-  Lesser: '<',
-  LesserOrEqual: '<=',
-  Greater: '>',
-  GreaterOrEqual: '>=',
-
-  For: 'for',
-  If: 'if',
-
-  //
-  Assignement: '='
-  //
-
-} );
-
-class CompiledTemplateModel {
-
-  constructor() {
-
-    this.compiledHtml = '';
-
-    /** @type { HTMLTemplateElement[] } */
-    this.compiledTemplateElems = [];
-
-  }
-
-}
 
 /*
  * Copyright (c) 2019 João Pedro Martins Neves - All Rights Reserved.
@@ -555,6 +514,47 @@ try {
 }
 
 
+
+const SYNTAX_TOKENS = Object.freeze( {
+
+  OpenTag: '<',
+  ClosingTag: '/',
+  CloseTag: '>',
+  SyntaxTagToken: '_',
+  ComponentRef: '&',
+
+  // Boolean()
+  Equal: '==',
+  EqualStrict: '===',
+  NotEqual: '!=',
+  NotEqualStrict: '!==',
+  Lesser: '<',
+  LesserOrEqual: '<=',
+  Greater: '>',
+  GreaterOrEqual: '>=',
+
+  For: 'for',
+  If: 'if',
+
+  //
+  Assignement: '='
+  //
+
+} );
+
+class CompiledTemplateModel {
+
+  constructor() {
+
+    this.compiledHtml = '';
+
+    /** @type { HTMLTemplateElement[] } */
+    this.compiledTemplateElems = [];
+
+  }
+
+}
+
 class Utils {
 
   constructor() {
@@ -596,31 +596,90 @@ class Component {
 
     this.stylesheet = stylesheet;
 
+    /**
+     * @type { ProxyConstructor | null } */
     this.state = null;
 
     this.____private = {
-      /** 
-       *  type { string | null }
-       *  @type { string | null }
+      /**
+       *  type { string[] }
+       *  @type { string[] }
        */
-      compiledHtml: null
+      templatesToInject: [],
+
+      /**
+       * Dictionary<property: string, Callbacks: List<Function>> of observer callbacks (functions) organized by properties
+       * for complex elements.
+       */
+      customStateObservers: new Dictionary(),
+
+      /**
+       * @param { string } property property
+       * @param { Function } Callback Callback( property, value )
+       */
+      subToCustomStateChange: ( property, Callback ) => {
+        const callbacksIdx = this.____private.customStateObservers.findIndexOfKey( property );
+
+        if ( !callbacksIdx ) {
+          let newList = new List();
+          newList.add( Callback );
+
+          this.____private.customStateObservers.add( property, newList );
+
+        } else {
+          const callbackList = this.____private.customStateObservers.getByIndex( callbacksIdx );
+          callbackList.add( Callback );
+          this.____private.customStateObservers.updateByKey( property, callbackList );
+        }
+
+      }
     };
 
   }
 
-  createState = ( stateObj ) => {
+  /**
+   *
+   * @param { object } stateObj
+   * @param { string | null } arrayName For arrays you **must** specify the exact same name of the property that has the array, otherwise it can be null.
+   */
+  createState( stateObj, arrayName = null ) {
     const thisComponent = this;
 
     return new Proxy( stateObj, {
-      set( target, property, value ) {
+      set( target, property, value, receiver ) {
         target[property] = value;
-        document.querySelector( `[data-component="${thisComponent.name}"][data-binding="${property}"]` ).innerHTML = thisComponent.state[property];
+
+        if ( Array.isArray( target ) ) {
+          if ( !arrayName ) {
+            throw new Error( `You must specify the array name to create a state. In the component "${thisComponent.name}"` );
+          }
+
+          property = arrayName;
+        }
+
+        const element = document.querySelector( `[data-component="${thisComponent.name}"][data-binding="${property}"]` );
+
+        if ( element.dataset.token === SYNTAX_TOKENS.SyntaxTagToken ) {
+          element.innerHTML = thisComponent.state[property];
+
+        } else {
+          const callbackList = thisComponent.____private.customStateObservers.getByKey( property );
+
+          if ( !callbackList ) {
+            return true;
+
+          } else {
+            callbackList.forEach( ( Callback ) => {
+              Callback( property, value );
+            } );
+          }
+
+        }
 
         return true;
       }
     } );
   }
-
 }
 
 
@@ -631,7 +690,7 @@ class Page {
 }
 
 
-/** 
+/**
  * For <template compilation>.
  * This is used when there's property binding.
  */
@@ -645,32 +704,30 @@ class ____TemplateElemCompiler {
     return '';
   }
 
-  /** 
+  /**
    * @param { string } forBlock
    */
-  static FOR( forBlock ) {
+  static FOR( componentName, propertyToBind, iterationHook, templateToRepeat ) {
 
-    /** @type { HTMLTemplateElement } */
-    const template = this.____private.createTemplate();
-    template.id = '';
-    template.innerHTML = '';
+    let encodedForBlock = encodeURI(
+      `<_for let="${iterationHook.join( ' ' )}">
+          ${ templateToRepeat}
+       </_for>
+      `
+    );
 
-    return '';
+    return `
+      <template data-component="${componentName}" data-binding="${propertyToBind}" data-token="${SYNTAX_TOKENS.For}">
+        ${encodedForBlock}
+      </template>
+    `;
   }
 
-  /** 
+  /**
    * @param { string } ifBlock
    */
   static IF( ifBlock ) {
     return '';
-  }
-
-}
-
-____TemplateElemCompiler.prototype.____private = {
-
-  createTemplate: () => {
-    return document.createElement( 'template' );
   }
 
 }
@@ -683,9 +740,9 @@ class ____HTMLBlocksCompiler {
   /**
    * Make sure to call this after "<_ or </_"
    * Returns [ innerIndex<number>, tag<string> ]
-   * 
+   *
    * @param { string } template
-   * 
+   *
    * @returns { [number, string] }
    */
   static getThisTag( template, innerIndex ) {
@@ -694,9 +751,8 @@ class ____HTMLBlocksCompiler {
 
     do {
       currentChar = template[innerIndex];
-      ++innerIndex;
-
       tag += currentChar;
+      ++innerIndex;
 
     } while ( currentChar !== SYNTAX_TOKENS.CloseTag && currentChar !== ' ' && currentChar !== '=' );
 
@@ -705,13 +761,13 @@ class ____HTMLBlocksCompiler {
 
   /**
    * Returns [ innerIndex<number>, property<object>,  ]
-   * 
+   *
    * @param { Component } component
    * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
-   * 
+   *
    * @returns { [number, object] }
    */
-  static PROP( component, innerIndex ) {
+  static PROP( component, innerIndex, ignorePropertyBinding = false ) {
     let thisProperty = '';
     let currentChar;
 
@@ -731,7 +787,7 @@ class ____HTMLBlocksCompiler {
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
     const splitedProperties = thisProperty.split( '.' );
-    const isPropertyBinding = splitedProperties[0] === 'state';
+    const isPropertyBinding = splitedProperties[0] === 'state' && !ignorePropertyBinding;
 
     thisProperty = component;
     for ( let i = 0; i < splitedProperties.length; ++i ) {
@@ -745,18 +801,22 @@ class ____HTMLBlocksCompiler {
     }
 
     if ( isPropertyBinding ) {
-      thisProperty = `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}"> ${thisProperty} </span>`;
+      thisProperty = `
+        <span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}" data-token="${SYNTAX_TOKENS.SyntaxTagToken}">
+          ${thisProperty}
+        </span>
+      `;
     }
 
     return [innerIndex, thisProperty];
   }
 
-  // TODO: THIS IS JUST AN IDEA. REFACTOR.  
-  /** 
+  // TODO: THIS IS JUST AN IDEA. REFACTOR.
+  /**
    *  Returns [iterationHook<string>, templateToRepeat<string>]
-   *  
+   *
    * @param { string } forBlock
-   * 
+   *
    * @return { [string, string] }
    */
   static FOR( forBlock ) {
@@ -790,7 +850,7 @@ class ____HTMLBlocksCompiler {
     return [iterationHook, templateToRepeat];
   }
 
-  /** 
+  /**
    * @param { string } ifBlock
    */
   static IF( ifBlock ) {
@@ -811,7 +871,7 @@ class TemplateCompiler {
    *
    * @param { Startup } startup
    * @param { Component } component
-   * 
+   *
    * @return { string } The compiled HTML
    */
   static compile( component ) {
@@ -872,9 +932,18 @@ class TemplateCompiler {
                 );
               }
 
-              let innerComponent = Object.create( component );
+              /** @type { Component } */
+              let innerComponent = Object.assign( {}, component );
               innerComponent.template = blockResponse[0][2] + '<';
-              const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0 )[1];
+              const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0, true )[1];
+
+              const splitedProperties = blockResponse[0][2].split( '.' );
+              const hasPropertyBinding = splitedProperties[0] === 'state';
+
+              if ( hasPropertyBinding ) {
+                component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
+                compiledHtml += `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}">`;
+              }
 
               switch ( blockResponse[0][1] ) {
                 case 'of':
@@ -893,6 +962,8 @@ class TemplateCompiler {
                 default:
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
               }
+
+              compiledHtml += '</span>';
 
               break;
 
@@ -935,11 +1006,11 @@ class TemplateCompiler {
       /**
        * Get the value inside a complex template tag.
        * Make sure to call this in the index of "<" in "<_".
-       * 
+       *
        * Returns [ innerIndex: number, block: string ]
-       * 
+       *
        * @param { string } template
-       * 
+       *
        * @return { [number, string] }
        */
       getThisComplexBlock: ( TAG_SYNTAX_TOKEN, template, innerIndex ) => {
@@ -950,6 +1021,7 @@ class TemplateCompiler {
         let blockEnded = false;
         while ( !blockEnded ) {
 
+          // "</_" && !"</_>"
           if ( template[innerIndex] === SYNTAX_TOKENS.OpenTag &&
                template[innerIndex + 1] === SYNTAX_TOKENS.ClosingTag &&
                template[innerIndex + 2] === SYNTAX_TOKENS.SyntaxTagToken &&
@@ -968,6 +1040,14 @@ class TemplateCompiler {
           } else {
             thisBlock += template[innerIndex];
             ++innerIndex;
+          }
+
+          // Nothing found.
+          if ( !template[innerIndex] ) {
+            throw new Error( `Could not find the close tag of "<_${TAG_SYNTAX_TOKEN}>".
+Probably a syntax error.
+Template:
+"${template}"` );
           }
         }
 
@@ -1004,7 +1084,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Component } component
    */
   addComponent( component ) {
@@ -1013,7 +1093,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Component[] } components
    */
   addComponents( components ) {
@@ -1024,7 +1104,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Page } page
    */
   addPage( page ) {
@@ -1037,7 +1117,7 @@ class Startup {
       let thisCompiledHTML;
 
       this.components.forEachValue(
-        /** 
+        /**
          * @param { Component } component
          */
         ( component ) => {
@@ -1045,11 +1125,31 @@ class Startup {
 
           Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
             elem.innerHTML = thisCompiledHTML;
-        } );
+          } );
+
+          let i;
+          for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
+            document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[i] );
+
+            Array.from( document.querySelectorAll( `template[data-component="${component.name}"]` ) ).forEach( ( template ) => {
+
+              component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
+                /** @type { Component } */
+                const innerComponent = Object.assign( {}, component );
+
+                Array.from( document.querySelectorAll( `span[data-component="${component.name}"][data-binding="${property}"]` ) ).forEach( ( elem ) => {
+                  innerComponent.template = decodeURI( template.innerHTML );
+                  elem.innerHTML = TemplateCompiler.compile( innerComponent );
+                } );
+              } );
+
+            } );
+
+          }
         }
       );
 
-    // One page app.
+      // One page app.
     } else {
       // TODO: One page build logic.
     }

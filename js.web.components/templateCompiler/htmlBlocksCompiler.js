@@ -6,9 +6,9 @@ class ____HTMLBlocksCompiler {
   /**
    * Make sure to call this after "<_ or </_"
    * Returns [ innerIndex<number>, tag<string> ]
-   * 
+   *
    * @param { string } template
-   * 
+   *
    * @returns { [number, string] }
    */
   static getThisTag( template, innerIndex ) {
@@ -17,9 +17,8 @@ class ____HTMLBlocksCompiler {
 
     do {
       currentChar = template[innerIndex];
-      ++innerIndex;
-
       tag += currentChar;
+      ++innerIndex;
 
     } while ( currentChar !== SYNTAX_TOKENS.CloseTag && currentChar !== ' ' && currentChar !== '=' );
 
@@ -28,13 +27,13 @@ class ____HTMLBlocksCompiler {
 
   /**
    * Returns [ innerIndex<number>, property<object>,  ]
-   * 
+   *
    * @param { Component } component
    * @param { number } innerIndex The index after "<_>" of "<_> propertyBlockContent </_>"
-   * 
+   *
    * @returns { [number, object] }
    */
-  static PROP( component, innerIndex ) {
+  static PROP( component, innerIndex, ignorePropertyBinding = false ) {
     let thisProperty = '';
     let currentChar;
 
@@ -54,7 +53,7 @@ class ____HTMLBlocksCompiler {
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
     const splitedProperties = thisProperty.split( '.' );
-    const isPropertyBinding = splitedProperties[0] === 'state';
+    const isPropertyBinding = splitedProperties[0] === 'state' && !ignorePropertyBinding;
 
     thisProperty = component;
     for ( let i = 0; i < splitedProperties.length; ++i ) {
@@ -68,18 +67,22 @@ class ____HTMLBlocksCompiler {
     }
 
     if ( isPropertyBinding ) {
-      thisProperty = `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}"> ${thisProperty} </span>`;
+      thisProperty = `
+        <span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}" data-token="${SYNTAX_TOKENS.SyntaxTagToken}">
+          ${thisProperty}
+        </span>
+      `;
     }
 
     return [innerIndex, thisProperty];
   }
 
-  // TODO: THIS IS JUST AN IDEA. REFACTOR.  
-  /** 
+  // TODO: THIS IS JUST AN IDEA. REFACTOR.
+  /**
    *  Returns [iterationHook<string>, templateToRepeat<string>]
-   *  
+   *
    * @param { string } forBlock
-   * 
+   *
    * @return { [string, string] }
    */
   static FOR( forBlock ) {
@@ -113,7 +116,7 @@ class ____HTMLBlocksCompiler {
     return [iterationHook, templateToRepeat];
   }
 
-  /** 
+  /**
    * @param { string } ifBlock
    */
   static IF( ifBlock ) {
