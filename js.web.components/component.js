@@ -23,29 +23,88 @@ class Component {
 
     this.stylesheet = stylesheet;
 
+    /**
+     * @type { ProxyConstructor | null } */
     this.state = null;
 
     this.____private = {
-      /** 
-       *  type { string | null }
-       *  @type { string | null }
+      /**
+       *  type { string[] }
+       *  @type { string[] }
        */
-      compiledHtml: null
+      templatesToInject: [],
+
+      /**
+       * Dictionary<property: string, Callbacks: List<Function>> of observer callbacks (functions) organized by properties
+       * for complex elements.
+       */
+      customStateObservers: new Dictionary(),
+
+      /**
+       * @param { string } property property
+       * @param { Function } Callback Callback( property, value )
+       */
+      subToCustomStateChange: ( property, Callback ) => {
+        const callbacksIdx = this.____private.customStateObservers.findIndexOfKey( property );
+
+        if ( !callbacksIdx ) {
+          let newList = new List();
+          newList.add( Callback );
+
+          this.____private.customStateObservers.add( property, newList );
+
+        } else {
+          const callbackList = this.____private.customStateObservers.getByIndex( callbacksIdx );
+          callbackList.add( Callback );
+          this.____private.customStateObservers.updateByKey( property, callbackList );
+        }
+
+      }
     };
 
   }
 
-  createState = ( stateObj ) => {
+  /**
+   *
+   * @param { object } stateObj
+   * @param { string | null } arrayName For arrays you **must** specify the exact same name of the property that has the array, otherwise it can be null.
+   */
+  createState( stateObj, arrayName = null ) {
     const thisComponent = this;
 
     return new Proxy( stateObj, {
-      set( target, property, value ) {
+      set( target, property, value, receiver ) {
         target[property] = value;
-        document.querySelector( `[data-component="${thisComponent.name}"][data-binding="${property}"]` ).innerHTML = thisComponent.state[property];
+
+        if ( Array.isArray( target ) ) {
+          if ( !arrayName ) {
+            throw new Error( `You must specify the array name to create a state. In the component "${thisComponent.name}"` );
+          }
+
+          property = arrayName;
+        }
+
+        const element = document.querySelector( `[data-component="${thisComponent.name}"][data-binding="${property}"]` );
+
+        if ( element.dataset.token === SYNTAX_TOKENS.SyntaxTagToken ) {
+          element.innerHTML = thisComponent.state[property];
+
+        } else {
+          const callbackList = thisComponent.____private.customStateObservers.getByKey( property );
+
+          if ( !callbackList ) {
+            return true;
+
+          } else {
+            callbackList.forEach( ( Callback ) => {
+              Callback( property, value );
+            } );
+          }
+
+        }
 
         return true;
       }
     } );
   }
-
 }

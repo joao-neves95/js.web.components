@@ -21,7 +21,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Component } component
    */
   addComponent( component ) {
@@ -30,7 +30,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Component[] } components
    */
   addComponents( components ) {
@@ -41,7 +41,7 @@ class Startup {
   }
 
   /**
-   * 
+   *
    * @param { Page } page
    */
   addPage( page ) {
@@ -54,7 +54,7 @@ class Startup {
       let thisCompiledHTML;
 
       this.components.forEachValue(
-        /** 
+        /**
          * @param { Component } component
          */
         ( component ) => {
@@ -62,11 +62,31 @@ class Startup {
 
           Array.from( document.getElementsByTagName( component.name + SYNTAX_TOKENS.ComponentRef ) ).forEach( ( elem ) => {
             elem.innerHTML = thisCompiledHTML;
-        } );
+          } );
+
+          let i;
+          for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
+            document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[i] );
+
+            Array.from( document.querySelectorAll( `template[data-component="${component.name}"]` ) ).forEach( ( template ) => {
+
+              component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
+                /** @type { Component } */
+                const innerComponent = Object.assign( {}, component );
+
+                Array.from( document.querySelectorAll( `span[data-component="${component.name}"][data-binding="${property}"]` ) ).forEach( ( elem ) => {
+                  innerComponent.template = decodeURI( template.innerHTML );
+                  elem.innerHTML = TemplateCompiler.compile( innerComponent );
+                } );
+              } );
+
+            } );
+
+          }
         }
       );
 
-    // One page app.
+      // One page app.
     } else {
       // TODO: One page build logic.
     }
