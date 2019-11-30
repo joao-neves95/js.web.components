@@ -1,6 +1,6 @@
-﻿// @import<<DIR './constants'
+﻿// $import 'js.system.collections/dist/js.system.collections.js'
+// @import<<DIR './constants'
 // @import<<DIR './models'
-// $import 'js.system.collections/dist/js.system.collections.js'
 // @import './utils'
 // @import './component'
 // @import './page'
