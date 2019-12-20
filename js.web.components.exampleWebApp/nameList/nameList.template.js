@@ -9,6 +9,16 @@ const nameListTemplate = `
 </div>
 
 <div class="container">
+    <label>New Item:
+        <input id="new-todo-item" name="new-todo-item" type="text" required />
+    <label>
+    <button (click)="addItem()"
+            class="btn btn-success" type="button">
+        Add Item
+    </button>
+</div>
+
+<div class="container">
     <ul>
         <_for let="todoItem of state.todoItems">
             <li> <_>todoItem</_> </li>
