@@ -222,8 +222,8 @@ class TodoListComponent extends Component {
 - [x] Implement component state property data binding
 - [x] Implement "for" loop template with component property rendering for arrays
 - [x] Implement component state property data binding for "for" loops
-- [ ] Implement component scoped style injections
 - [x] Implement component method calls from template events
+- [ ] Implement component scoped style injections
 - [ ] Implement "for" loop template with component property rendering for objects
 - [ ] Implement "if" statement template
 - [ ] Implement support for having sub-components (render components inside other components)
