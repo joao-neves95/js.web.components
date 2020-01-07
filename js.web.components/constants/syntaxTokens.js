@@ -6,6 +6,11 @@ const SYNTAX_TOKENS = Object.freeze( {
   CloseTag: '>',
   SyntaxTagToken: '_',
   ComponentRef: '&',
+  OpenEventTag: '(',
+  CloseEventTag: ')',
+
+  For: 'for',
+  If: 'if',
 
   // Boolean()
   Equal: '==',
@@ -17,11 +22,5 @@ const SYNTAX_TOKENS = Object.freeze( {
   Greater: '>',
   GreaterOrEqual: '>=',
 
-  For: 'for',
-  If: 'if',
-
-  //
-  Assignement: '='
-  //
 
 } );
