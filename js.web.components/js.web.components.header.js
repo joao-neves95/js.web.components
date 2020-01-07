@@ -1,5 +1,6 @@
 ﻿// $import 'js.system.collections/dist/js.system.collections.js'
 // @import<<DIR './constants'
+// @import<<DIR './enums'
 // @import<<DIR './models'
 // @import './utils'
 // @import './component'

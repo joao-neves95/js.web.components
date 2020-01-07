@@ -29,6 +29,12 @@ class Component {
 
     this.____private = {
       /**
+       * type { MethodCallOnEvent[] }
+       * @type { MethodCallOnEvent[] }
+       */
+      methodCallsOnEvents: [],
+
+      /**
        *  type { string[] }
        *  @type { string[] }
        */

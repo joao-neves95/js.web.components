@@ -134,6 +134,87 @@ class TodoListComponent extends Component {
 }
 ```
 
+### Component Method Calls From Template DOM Events:
+
+#### Example:
+
+Template:
+``` html
+const todoListTemplate = `
+<div class="container">
+    <!-- Here is the event listener calling the component method. -->
+    <button (click)="addItem()"
+            class="btn btn-success" type="button">
+        Add Item
+    </button>
+</div>
+`;
+```
+
+Component:
+``` js
+class TodoListComponent extends Component {
+
+  constructor() {
+    super( 'app-todoList', todoListTemplate, [''] );
+  }
+
+  // The method to call.
+  addItem() {
+    console.log( 'Someone called me!' );
+  }
+
+}
+```
+
+### Component Method Calls From Template DOM Events (with property binding):
+
+#### Example:
+
+Template:
+``` html
+const todoListTemplate = `
+<div class="container">
+    <label>New Item:
+        <input id="new-todo-item" name="new-todo-item" type="text" required />
+    <label>
+    <!-- Here is the event listener calling the component method. -->
+    <button (click)="addItem()"
+            class="btn btn-success" type="button">
+        Add Item
+    </button>
+</div>
+
+<div class="container">
+    <ul>
+        <_for let="todoItem of state.todoItems">
+            <li> <_>todoItem</_> </li>
+        </_for>
+    </ul>
+</div>
+`;
+```
+
+Component:
+``` js
+class TodoListComponent extends Component {
+
+  constructor() {
+    super( 'app-todoList', todoListTemplate, [''] );
+
+    this.state = {
+      todoItems: this.createState( ['Study', 'Learn design patterns', 'Learn data structures'], 'todoItems' )
+    };
+  }
+
+  // The method to call.
+  addItem() {
+    this.state.todoItems.push( document.getElementById( 'new-todo-item' ).value );
+  }
+
+}
+```
+
 ---
 
 ## Features Roadmap:
@@ -141,8 +222,8 @@ class TodoListComponent extends Component {
 - [x] Implement component state property data binding
 - [x] Implement "for" loop template with component property rendering for arrays
 - [x] Implement component state property data binding for "for" loops
-- [ ] Implement component method calls from template events
 - [ ] Implement component scoped style injections
+- [x] Implement component method calls from template events
 - [ ] Implement "for" loop template with component property rendering for objects
 - [ ] Implement "if" statement template
 - [ ] Implement support for having sub-components (render components inside other components)

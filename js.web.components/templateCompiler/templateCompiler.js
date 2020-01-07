@@ -1,11 +1,10 @@
-// At the end refactor all of this.
+// TODO: In the future refactor all of this like the property and event compilation is organized.
 
 class TemplateCompiler {
   constructor() { }
 
   // #region COMPILE
 
-  // TODO: Break this up into multiple methods (not static).
   /**
    *
    * @param { Startup } startup
@@ -25,15 +24,8 @@ class TemplateCompiler {
 
       if ( currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
-        // TODO: Change to acomodate the new syntax: "app-<someName>&"
-        if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
-          innerIndex = i + 2;
-          // TODO: Check in the startup instance if the component has already been compiled.
-          // If not, compile it.
-
-        } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
-          // VALUES RENDERER.
-          // TODO: (VALUES RENDERER) Add property binding.
+        if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+          // VALUES COMPILER.
           // Jump this tokens (after "<_>").
           innerIndex = i + 3;
 
@@ -81,7 +73,7 @@ class TemplateCompiler {
 
               if ( hasPropertyBinding ) {
                 component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
-                compiledHtml += `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}">`;
+                compiledHtml += `<span ${DATA_SET_TAGS.Component_Prefixed}="${component.name}" ${DATA_SET_TAGS.BindingTo_Prefixed}="${splitedProperties[splitedProperties.length - 1]}">`;
               }
 
               switch ( blockResponse[0][1] ) {
@@ -96,7 +88,7 @@ class TemplateCompiler {
                   break;
 
                 case 'in':
-                  throw new Error( '"for in" loop NOT IMPLEMENTED.' );
+                  throw new Error( 'The "for in" loop NOT YET IMPLEMENTED.' );
 
                 default:
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
@@ -109,6 +101,7 @@ class TemplateCompiler {
             // #endregion FOR
 
             case SYNTAX_TOKENS.If:
+              throw new Error( `The "if" statement was NOT YET IMPLEMENTED.` );
               // compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
               break;
 
@@ -121,6 +114,13 @@ class TemplateCompiler {
 
         // Advance forward.
         i = innerIndex;
+
+      // EVENTS.
+      } else if ( currentChar === SYNTAX_TOKENS.OpenEventTag ) {
+        const eventResult = ____HTMLBlocksCompiler.EVENT( component, i );
+        compiledHtml += eventResult[2];
+        component.____private.methodCallsOnEvents.push( eventResult[1] );
+        i = eventResult[0];
 
       } else {
         // Normal HTML.

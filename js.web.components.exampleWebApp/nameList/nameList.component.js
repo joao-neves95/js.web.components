@@ -11,4 +11,8 @@ class NameListComponent extends Component {
     };
   }
 
+  addItem() {
+    this.state.todoItems.push( document.getElementById( 'new-todo-item' ).value );
+  }
+
 }
