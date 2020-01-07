@@ -1,5 +1,6 @@
 // $import 'js.system.collections/dist/js.system.collections.js'
 // @import<<DIR './constants'
+// @import<<DIR './enums'
 // @import<<DIR './models'
 // @import './utils'
 // @import './component'
@@ -515,6 +516,20 @@ try {
 
 
 
+const DATA_SET_PREFIX = 'data-';
+
+const DATA_SET_TAGS = Object.freeze({
+  Component: 'component',
+  Component_Prefixed: DATA_SET_PREFIX + 'component',
+  BindingTo: 'binding',
+  BindingTo_Prefixed: DATA_SET_PREFIX + 'binding',
+  EventMethodCall: 'eventmethodcall',
+  EventMethodCall_Prefixed: DATA_SET_PREFIX + 'eventmethodcall',
+  EventMethodToCall: 'eventmethodname',
+  EventMethodToCall_Prefixed: DATA_SET_PREFIX + 'eventmethodname'
+});
+
+
 const SYNTAX_TOKENS = Object.freeze( {
 
   OpenTag: '<',
@@ -522,6 +537,11 @@ const SYNTAX_TOKENS = Object.freeze( {
   CloseTag: '>',
   SyntaxTagToken: '_',
   ComponentRef: '&',
+  OpenEventTag: '(',
+  CloseEventTag: ')',
+
+  For: 'for',
+  If: 'if',
 
   // Boolean()
   Equal: '==',
@@ -533,14 +553,13 @@ const SYNTAX_TOKENS = Object.freeze( {
   Greater: '>',
   GreaterOrEqual: '>=',
 
-  For: 'for',
-  If: 'if',
-
-  //
-  Assignement: '='
-  //
 
 } );
+
+
+const EventType = Object.freeze({
+  DOM: 1
+});
 
 class CompiledTemplateModel {
 
@@ -551,6 +570,25 @@ class CompiledTemplateModel {
     /** @type { HTMLTemplateElement[] } */
     this.compiledTemplateElems = [];
 
+  }
+
+}
+
+
+class MethodCallOnEvent {
+
+  /**
+   *
+   * @param { string } identifier A unique identifier for this event method call.
+   * @param { string } eventName The name of the event (E.g: 'click')
+   * @param { string } methodName The name of the method to call.
+   * @param { string } eventType The type of the event. Use the EventType enum.accordion
+   */
+  constructor( identifier, eventName, methodName, eventType = EventType.DOM ) {
+    this.identifier = identifier;
+    this.eventName = eventName;
+    this.methodName = methodName;
+    this.eventType = eventType;
   }
 
 }
@@ -567,6 +605,22 @@ class Utils {
 
   static isNullOrUndefinedOrEmptyStr( value ) {
     return value === '' || Utils.isNullOrUndefined( value );
+  }
+
+  static ____ALLOWED_APLHANUM_RANDOM_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+  /**
+   * Returns a pseudo-random string.
+   * @param { number } length
+   */
+  static randomAlphaNumStr( length ) {
+    let result = '';
+
+    for (let i = 0; i < length; ++i) {
+      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS.length ) ];
+    }
+
+    return result;
   }
 
 }
@@ -601,6 +655,12 @@ class Component {
     this.state = null;
 
     this.____private = {
+      /**
+       * type { MethodCallOnEvent[] }
+       * @type { MethodCallOnEvent[] }
+       */
+      methodCallsOnEvents: [],
+
       /**
        *  type { string[] }
        *  @type { string[] }
@@ -760,6 +820,77 @@ class ____HTMLBlocksCompiler {
   }
 
   /**
+   * Call this on the '(' index of the event property.
+   *
+   * Returns [ innerIndex<number>, methodCallOnEvent<MethodCallOnEvent>, compiledEventPropertyHTML<string> ]
+   *
+   * @param { Component } component
+   * @param { number } innerIndex The index of '(' of '(<event-name>)="<property-name>" '
+   *
+   * @returns { [number, MethodCallOnEvent, string] }
+   */
+  static EVENT( component, innerIndex ) {
+    // Just as a precaution.
+    if (component.template[innerIndex] != SYNTAX_TOKENS.OpenEventTag) {
+      throw new Error( `Expected an open event token "${SYNTAX_TOKENS.OpenEventTag}" on the the template of the component "${component.name}"` );
+
+    } else {
+      ++innerIndex;
+    }
+
+    let thisEventName = '';
+
+    do {
+      thisEventName += component.template[innerIndex];
+      ++innerIndex;
+
+      if ( innerIndex > component.template.length ) {
+        throw new Error( `COMPILATION ERROR: Could not find the event name on the template of the component "${component.name}".\n
+        This is most likely a syntax error. The close event token "${SYNTAX_TOKENS.CloseEventTag}" was not found.` );
+      }
+
+    } while ( component.template[innerIndex] !== SYNTAX_TOKENS.CloseEventTag );
+
+    // Jump to '"' of '(<event-name>)="'
+    innerIndex += 2;
+
+    if ( component.template[innerIndex] !== '"' ) {
+      throw new Error( `COMPILATION ERROR: Could not find the '"' token on the template of the component "${component.name}".\n
+      This is most likely a syntax error on the event property.` );
+
+    } else {
+      ++innerIndex;
+    }
+
+    let thisMethodName = '';
+
+    do {
+      thisMethodName += component.template[innerIndex];
+      ++innerIndex;
+
+      if ( innerIndex > component.template.length ) {
+        throw new Error( `COMPILATION ERROR: Could not find the method name to call on the template of the component "${component.name}".\n
+This is most likely a syntax error on the event property. The method call token ('(') was not found.` );
+      }
+
+    } while ( component.template[innerIndex] !== '(' )
+
+    innerIndex += 3;
+    const thisUniqueId = Utils.randomAlphaNumStr( 6 );
+
+    return [
+      innerIndex,
+      new MethodCallOnEvent(
+        thisUniqueId,
+        thisEventName,
+        thisMethodName,
+        EventType.DOM
+      ),
+      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed }="${ thisMethodName }" `
+    ];
+  }
+
+  /**
    * Returns [ innerIndex<number>, property<object>,  ]
    *
    * @param { Component } component
@@ -859,14 +990,13 @@ class ____HTMLBlocksCompiler {
 
 }
 
-// At the end refactor all of this.
+// TODO: In the future refactor all of this like the property and event compilation is organized.
 
 class TemplateCompiler {
   constructor() { }
 
   // #region COMPILE
 
-  // TODO: Break this up into multiple methods (not static).
   /**
    *
    * @param { Startup } startup
@@ -886,15 +1016,8 @@ class TemplateCompiler {
 
       if ( currentChar === SYNTAX_TOKENS.OpenTag && component.template[i + 1] === SYNTAX_TOKENS.SyntaxTagToken ) {
 
-        // TODO: Change to acomodate the new syntax: "app-<someName>&"
-        if ( component.template[i + 1] === SYNTAX_TOKENS.ComponentRef ) {
-          innerIndex = i + 2;
-          // TODO: Check in the startup instance if the component has already been compiled.
-          // If not, compile it.
-
-        } else if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
-          // VALUES RENDERER.
-          // TODO: (VALUES RENDERER) Add property binding.
+        if ( component.template[i + 2] === SYNTAX_TOKENS.CloseTag ) {
+          // VALUES COMPILER.
           // Jump this tokens (after "<_>").
           innerIndex = i + 3;
 
@@ -942,7 +1065,7 @@ class TemplateCompiler {
 
               if ( hasPropertyBinding ) {
                 component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
-                compiledHtml += `<span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}">`;
+                compiledHtml += `<span ${DATA_SET_TAGS.Component_Prefixed}="${component.name}" ${DATA_SET_TAGS.BindingTo_Prefixed}="${splitedProperties[splitedProperties.length - 1]}">`;
               }
 
               switch ( blockResponse[0][1] ) {
@@ -957,7 +1080,7 @@ class TemplateCompiler {
                   break;
 
                 case 'in':
-                  throw new Error( '"for in" loop NOT IMPLEMENTED.' );
+                  throw new Error( 'The "for in" loop NOT YET IMPLEMENTED.' );
 
                 default:
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
@@ -970,6 +1093,7 @@ class TemplateCompiler {
             // #endregion FOR
 
             case SYNTAX_TOKENS.If:
+              throw new Error( `The "if" statement was NOT YET IMPLEMENTED.` );
               // compiledHtml += ____HTMLBlocksCompiler.IF( thisBlock );
               break;
 
@@ -982,6 +1106,13 @@ class TemplateCompiler {
 
         // Advance forward.
         i = innerIndex;
+
+      // EVENTS.
+      } else if ( currentChar === SYNTAX_TOKENS.OpenEventTag ) {
+        const eventResult = ____HTMLBlocksCompiler.EVENT( component, i );
+        compiledHtml += eventResult[2];
+        component.____private.methodCallsOnEvents.push( eventResult[1] );
+        i = eventResult[0];
 
       } else {
         // Normal HTML.
@@ -1131,25 +1262,41 @@ class Startup {
           for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
             document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[i] );
 
-            Array.from( document.querySelectorAll( `template[data-component="${component.name}"]` ) ).forEach( ( template ) => {
+            Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"]` ) ).forEach( ( template ) => {
 
               component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
                 /** @type { Component } */
                 const innerComponent = Object.assign( {}, component );
 
-                Array.from( document.querySelectorAll( `span[data-component="${component.name}"][data-binding="${property}"]` ) ).forEach( ( elem ) => {
-                  innerComponent.template = decodeURI( template.innerHTML );
-                  elem.innerHTML = TemplateCompiler.compile( innerComponent );
-                } );
+                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"][${DATA_SET_TAGS.BindingTo_Prefixed}="${property}"]` ) )
+                  .forEach( ( elem ) => {
+                    innerComponent.template = decodeURI( template.innerHTML );
+                    elem.innerHTML = TemplateCompiler.compile( innerComponent );
+                  } );
               } );
 
             } );
 
           }
+
+          component.____private.templatesToInject = [];
+
+          let thisMethodCall;
+          for ( i = 0; i < component.____private.methodCallsOnEvents.length; ++i ) {
+            /** @type { MethodCallOnEvent } */
+            thisMethodCall = component.____private.methodCallsOnEvents[i];
+
+            document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisMethodCall.identifier }"]` )
+              .addEventListener( thisMethodCall.eventName, ( e ) => {
+                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]();
+              });
+          }
+
+          component.____private.methodCallsOnEvents = [];
         }
       );
 
-      // One page app.
+    // One page app.
     } else {
       // TODO: One page build logic.
     }

@@ -82,7 +82,7 @@ class NameListComponent extends Component {
   }
 
   addItem() {
-    this.names.push( document.getElementById('new-todo-item').value );
+    this.state.todoItems.push( document.getElementById( 'new-todo-item' ).value );
   }
 
 }
