@@ -26,6 +26,77 @@ class ____HTMLBlocksCompiler {
   }
 
   /**
+   * Call this on the '(' index of the event property.
+   *
+   * Returns [ innerIndex<number>, methodCallOnEvent<MethodCallOnEvent>, compiledEventPropertyHTML<string> ]
+   *
+   * @param { Component } component
+   * @param { number } innerIndex The index of '(' of '(<event-name>)="<property-name>" '
+   *
+   * @returns { [number, MethodCallOnEvent, string] }
+   */
+  static EVENT( component, innerIndex ) {
+    // Just as a precaution.
+    if (component.template[innerIndex] != SYNTAX_TOKENS.OpenEventTag) {
+      throw new Error( `Expected an open event token "${SYNTAX_TOKENS.OpenEventTag}" on the the template of the component "${component.name}"` );
+
+    } else {
+      ++innerIndex;
+    }
+
+    let thisEventName = '';
+
+    do {
+      thisEventName += component.template[innerIndex];
+      ++innerIndex;
+
+      if ( innerIndex > component.template.length ) {
+        throw new Error( `COMPILATION ERROR: Could not find the event name on the template of the component "${component.name}".\n
+        This is most likely a syntax error. The close event token "${SYNTAX_TOKENS.CloseEventTag}" was not found.` );
+      }
+
+    } while ( component.template[innerIndex] !== SYNTAX_TOKENS.CloseEventTag );
+
+    // Jump to '"' of '(<event-name>)="'
+    innerIndex += 2;
+
+    if ( component.template[innerIndex] !== '"' ) {
+      throw new Error( `COMPILATION ERROR: Could not find the '"' token on the template of the component "${component.name}".\n
+      This is most likely a syntax error on the event property.` );
+
+    } else {
+      ++innerIndex;
+    }
+
+    let thisMethodName = '';
+
+    do {
+      thisMethodName += component.template[innerIndex];
+      ++innerIndex;
+
+      if ( innerIndex > component.template.length ) {
+        throw new Error( `COMPILATION ERROR: Could not find the method name to call on the template of the component "${component.name}".\n
+This is most likely a syntax error on the event property. The method call token ('(') was not found.` );
+      }
+
+    } while ( component.template[innerIndex] !== '(' )
+
+    innerIndex += 3;
+    const thisUniqueId = Utils.randomAlphaNumStr( 6 );
+
+    return [
+      innerIndex,
+      new MethodCallOnEvent(
+        thisUniqueId,
+        thisEventName,
+        thisMethodName,
+        EventType.DOM
+      ),
+      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed }="${ thisMethodName }" `
+    ];
+  }
+
+  /**
    * Returns [ innerIndex<number>, property<object>,  ]
    *
    * @param { Component } component

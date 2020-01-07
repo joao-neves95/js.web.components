@@ -68,25 +68,41 @@ class Startup {
           for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
             document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[i] );
 
-            Array.from( document.querySelectorAll( `template[data-component="${component.name}"]` ) ).forEach( ( template ) => {
+            Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"]` ) ).forEach( ( template ) => {
 
               component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
                 /** @type { Component } */
                 const innerComponent = Object.assign( {}, component );
 
-                Array.from( document.querySelectorAll( `span[data-component="${component.name}"][data-binding="${property}"]` ) ).forEach( ( elem ) => {
-                  innerComponent.template = decodeURI( template.innerHTML );
-                  elem.innerHTML = TemplateCompiler.compile( innerComponent );
-                } );
+                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"][${DATA_SET_TAGS.BindingTo_Prefixed}="${property}"]` ) )
+                  .forEach( ( elem ) => {
+                    innerComponent.template = decodeURI( template.innerHTML );
+                    elem.innerHTML = TemplateCompiler.compile( innerComponent );
+                  } );
               } );
 
             } );
 
           }
+
+          component.____private.templatesToInject = [];
+
+          let thisMethodCall;
+          for ( i = 0; i < component.____private.methodCallsOnEvents.length; ++i ) {
+            /** @type { MethodCallOnEvent } */
+            thisMethodCall = component.____private.methodCallsOnEvents[i];
+
+            document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisMethodCall.identifier }"]` )
+              .addEventListener( thisMethodCall.eventName, ( e ) => {
+                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]();
+              });
+          }
+
+          component.____private.methodCallsOnEvents = [];
         }
       );
 
-      // One page app.
+    // One page app.
     } else {
       // TODO: One page build logic.
     }
