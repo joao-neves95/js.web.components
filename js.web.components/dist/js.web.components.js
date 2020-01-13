@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 // $import 'js.system.collections/dist/js.system.collections.js'
 // @import<<DIR './constants'
 // @import<<DIR './enums'
@@ -609,6 +617,14 @@ class MethodCallOnEvent {
 
 }
 
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 class Utils {
 
   constructor() {
@@ -640,6 +656,14 @@ class Utils {
   }
 
 }
+
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
 
 
 class Component {
@@ -758,12 +782,28 @@ class Component {
   }
 }
 
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 
 class Page {
 
   constructor() { }
 
 }
+
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
 
 
 /**
@@ -1224,8 +1264,24 @@ Template:
 
 } // end of class
 
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 
 /// <reference path="./node_modules/js.system.collections/dist/js.system.collections.js" />
+/*
+ * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 
 class Startup {
 
