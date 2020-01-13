@@ -1,5 +1,4 @@
-﻿/// <reference path="../js.web.components/jsDocReferences.js" />
-/// <reference path="../js.web.dom/jsDocReferences.js" />
+﻿extensions: .cs .ts .js .css .less .scss
 /*
  * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
@@ -7,4 +6,3 @@
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
