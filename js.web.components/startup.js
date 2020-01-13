@@ -70,6 +70,8 @@ class Startup {
 
             Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"]` ) ).forEach( ( template ) => {
 
+              // It was necessary to make an Observer out of the component, because components don't have access
+              // to the TemplateCompiler.
               component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
                 /** @type { Component } */
                 const innerComponent = Object.assign( {}, component );

@@ -65,6 +65,7 @@ class TemplateCompiler {
 
               /** @type { Component } */
               let innerComponent = Object.assign( {}, component );
+              // The "<" token is a hack.
               innerComponent.template = blockResponse[0][2] + '<';
               const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0, true )[1];
 

@@ -607,7 +607,7 @@ class Utils {
     return value === '' || Utils.isNullOrUndefined( value );
   }
 
-  static ____ALLOWED_APLHANUM_RANDOM_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  static ____ALLOWED_APLHANUM_RANDOM_CHARS() { return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" };
 
   /**
    * Returns a pseudo-random string.
@@ -617,7 +617,7 @@ class Utils {
     let result = '';
 
     for (let i = 0; i < length; ++i) {
-      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS.length ) ];
+      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS().length ) ];
     }
 
     return result;
@@ -1057,6 +1057,7 @@ class TemplateCompiler {
 
               /** @type { Component } */
               let innerComponent = Object.assign( {}, component );
+              // The "<" token is a hack.
               innerComponent.template = blockResponse[0][2] + '<';
               const propValues = ____HTMLBlocksCompiler.PROP( innerComponent, 0, true )[1];
 
@@ -1264,6 +1265,8 @@ class Startup {
 
             Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"]` ) ).forEach( ( template ) => {
 
+              // It was necessary to make an Observer out of the component, because components don't have access
+              // to the TemplateCompiler.
               component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
                 /** @type { Component } */
                 const innerComponent = Object.assign( {}, component );
