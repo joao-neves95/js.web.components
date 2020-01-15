@@ -1,15 +1,15 @@
 
 const DATA_SET_PREFIX = 'data-';
 
-const DATA_SET_TAGS = Object.freeze({
-  ComponentId: 'componentid',
-  ComponentId_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.ComponentId,
-  Component: 'component',
-  Component_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.Component,
-  BindingTo: 'binding',
-  BindingTo_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.BindingTo,
-  EventMethodCall: 'eventmethodcall',
-  EventMethodCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodCall,
-  EventMethodToCall: 'eventmethodname',
-  EventMethodToCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodToCall
-});
+class DATA_SET_TAGS {
+  static ComponentId() { return 'componentid' }
+  static ComponentId_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.ComponentId() }
+  static Component() { return 'component' }
+  static Component_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.Component() }
+  static BindingTo() { return 'binding' }
+  static BindingTo_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.BindingTo() }
+  static EventMethodCall() { return 'eventmethodcall' }
+  static EventMethodCall_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodCall() }
+  static EventMethodToCall() { return 'eventmethodname' }
+  static EventMethodToCall_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodToCall() }
+}

@@ -100,7 +100,7 @@ This is most likely a syntax error on the event property. The method call token 
         thisMethodName,
         EventType.DOM
       ),
-      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed }="${ thisMethodName }" `
+      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed() }="${ thisMethodName }" `
     ];
   }
 
