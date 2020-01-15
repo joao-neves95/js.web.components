@@ -104,7 +104,7 @@ class Startup {
 
             document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisMethodCall.identifier }"]` )
               .addEventListener( thisMethodCall.eventName, ( e ) => {
-                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]();
+                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]( e );
               });
           }
 
