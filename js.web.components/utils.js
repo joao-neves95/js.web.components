@@ -30,7 +30,7 @@ class Utils {
     let result = '';
 
     for (let i = 0; i < length; ++i) {
-      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS().length ) ];
+      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS()[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS().length ) ];
     }
 
     return result;
