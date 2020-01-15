@@ -527,14 +527,16 @@ try {
 const DATA_SET_PREFIX = 'data-';
 
 const DATA_SET_TAGS = Object.freeze({
+  ComponentId: 'componentid',
+  ComponentId_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.ComponentId,
   Component: 'component',
-  Component_Prefixed: DATA_SET_PREFIX + 'component',
+  Component_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.Component,
   BindingTo: 'binding',
-  BindingTo_Prefixed: DATA_SET_PREFIX + 'binding',
+  BindingTo_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.BindingTo,
   EventMethodCall: 'eventmethodcall',
-  EventMethodCall_Prefixed: DATA_SET_PREFIX + 'eventmethodcall',
+  EventMethodCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodCall,
   EventMethodToCall: 'eventmethodname',
-  EventMethodToCall_Prefixed: DATA_SET_PREFIX + 'eventmethodname'
+  EventMethodToCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodToCall
 });
 
 /*
@@ -649,7 +651,7 @@ class Utils {
     let result = '';
 
     for (let i = 0; i < length; ++i) {
-      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS().length ) ];
+      result += Utils.____ALLOWED_APLHANUM_RANDOM_CHARS()[ Math.floor( Math.random() * Utils.____ALLOWED_APLHANUM_RANDOM_CHARS().length ) ];
     }
 
     return result;
@@ -683,8 +685,11 @@ class Component {
       throw new Error( 'You must provide a component name.' );
     }
 
+    this._id = Utils.randomAlphaNumStr( 6 );
+
     // TODO: Add an underscore to internal properties.
     this.name = name;
+
 
     this.template = template;
 
@@ -1379,7 +1384,7 @@ class Startup {
 
             document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisMethodCall.identifier }"]` )
               .addEventListener( thisMethodCall.eventName, ( e ) => {
-                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]();
+                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]( e );
               });
           }
 
