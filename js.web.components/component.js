@@ -24,8 +24,11 @@ class Component {
       throw new Error( 'You must provide a component name.' );
     }
 
+    this._id = Utils.randomAlphaNumStr( 6 );
+
     // TODO: Add an underscore to internal properties.
     this.name = name;
+
 
     this.template = template;
 
