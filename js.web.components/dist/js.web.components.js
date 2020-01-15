@@ -526,18 +526,18 @@ try {
 
 const DATA_SET_PREFIX = 'data-';
 
-const DATA_SET_TAGS = Object.freeze({
-  ComponentId: 'componentid',
-  ComponentId_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.ComponentId,
-  Component: 'component',
-  Component_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.Component,
-  BindingTo: 'binding',
-  BindingTo_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.BindingTo,
-  EventMethodCall: 'eventmethodcall',
-  EventMethodCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodCall,
-  EventMethodToCall: 'eventmethodname',
-  EventMethodToCall_Prefixed: DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodToCall
-});
+class DATA_SET_TAGS {
+  static ComponentId() { return 'componentid' }
+  static ComponentId_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.ComponentId() }
+  static Component() { return 'component' }
+  static Component_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.Component() }
+  static BindingTo() { return 'binding' }
+  static BindingTo_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.BindingTo() }
+  static EventMethodCall() { return 'eventmethodcall' }
+  static EventMethodCall_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodCall() }
+  static EventMethodToCall() { return 'eventmethodname' }
+  static EventMethodToCall_Prefixed() { return DATA_SET_PREFIX + DATA_SET_TAGS.EventMethodToCall() }
+}
 
 /*
  * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
@@ -955,7 +955,7 @@ This is most likely a syntax error on the event property. The method call token 
         thisMethodName,
         EventType.DOM
       ),
-      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed }="${ thisMethodName }" `
+      ` ${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisUniqueId }" ${ DATA_SET_TAGS.EventMethodToCall_Prefixed() }="${ thisMethodName }" `
     ];
   }
 
@@ -1356,7 +1356,7 @@ class Startup {
           for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
             document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[i] );
 
-            Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"]` ) ).forEach( ( template ) => {
+            Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"]` ) ).forEach( ( template ) => {
 
               // It was necessary to make an Observer out of the component, because components don't have access
               // to the TemplateCompiler.
@@ -1364,7 +1364,7 @@ class Startup {
                 /** @type { Component } */
                 const innerComponent = Object.assign( {}, component );
 
-                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed}="${component.name}"][${DATA_SET_TAGS.BindingTo_Prefixed}="${property}"]` ) )
+                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"][${DATA_SET_TAGS.BindingTo_Prefixed()}="${property}"]` ) )
                   .forEach( ( elem ) => {
                     innerComponent.template = decodeURI( template.innerHTML );
                     elem.innerHTML = TemplateCompiler.compile( innerComponent );
@@ -1382,9 +1382,9 @@ class Startup {
             /** @type { MethodCallOnEvent } */
             thisMethodCall = component.____private.methodCallsOnEvents[i];
 
-            document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed }="${ thisMethodCall.identifier }"]` )
+            document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisMethodCall.identifier }"]` )
               .addEventListener( thisMethodCall.eventName, ( e ) => {
-                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall ] ]( e );
+                component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ] ]( e );
               });
           }
 
