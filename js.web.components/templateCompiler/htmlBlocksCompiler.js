@@ -147,7 +147,11 @@ This is most likely a syntax error on the event property. The method call token 
 
     if ( isPropertyBinding ) {
       thisProperty = `
-        <span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}" data-token="${SYNTAX_TOKENS.SyntaxTagToken}">
+        <span
+          ${ DATA_SET_TAGS.Component_Prefixed() }="${ component.name }"
+          ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ splitedProperties[splitedProperties.length - 1] }"
+          data-token="${ SYNTAX_TOKENS.SyntaxTagToken }">
+
           ${thisProperty}
         </span>
       `;

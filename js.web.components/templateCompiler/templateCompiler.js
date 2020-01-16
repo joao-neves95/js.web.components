@@ -81,8 +81,18 @@ class TemplateCompiler {
               const hasPropertyBinding = splitedProperties[0] === 'state';
 
               if ( hasPropertyBinding ) {
-                component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
-                compiledHtml += `<span ${DATA_SET_TAGS.Component_Prefixed}="${component.name}" ${DATA_SET_TAGS.BindingTo_Prefixed}="${splitedProperties[splitedProperties.length - 1]}">`;
+                component.____private.templatesToInject.push(
+                  ____TemplateElemCompiler.FOR(
+                    component.name,
+                    splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1]
+                  )
+                );
+
+                compiledHtml += `
+                  <span
+                    ${ DATA_SET_TAGS.Component_Prefixed() }="${ component.name }"
+                    ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ splitedProperties[splitedProperties.length - 1] }"
+                  >`;
               }
 
               switch ( blockResponse[0][1] ) {

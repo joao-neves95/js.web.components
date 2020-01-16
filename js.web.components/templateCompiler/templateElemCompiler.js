@@ -34,7 +34,11 @@ class ____TemplateElemCompiler {
     );
 
     return `
-      <template data-component="${componentName}" data-binding="${propertyToBind}" data-token="${SYNTAX_TOKENS.For}">
+      <template
+        ${ DATA_SET_TAGS.Component_Prefixed() }="${ componentName }"
+        ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ propertyToBind }"
+        data-token="${SYNTAX_TOKENS.For}"
+      >
         ${encodedForBlock}
       </template>
     `;
