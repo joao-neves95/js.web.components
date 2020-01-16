@@ -264,6 +264,11 @@ class Dictionary extends ____collection1 {
     }
   }
 
+  /**
+   * Returns an array with all the dictionary's values.
+   *
+   * @returns { any[] }
+   */
   getAllValues() {
     let allValues = [];
 
@@ -274,6 +279,20 @@ class Dictionary extends ____collection1 {
     return allValues;
   }
 
+  /**
+   * Returns an array with all the dictionary's keys.
+   *
+   * @returns { any[] }
+   */
+  getAllKeys() {
+    const allKeys = [];
+
+    for ( let i = 0; i < this.elements.length; ++i ) {
+      allKeys.push( Object.keys( this.elements[i] )[0] );
+    }
+
+    return allKeys;
+  }
 
   add( key, value ) {
     if ( this.uniqueKeys ) {
@@ -350,7 +369,7 @@ class Dictionary extends ____collection1 {
 
   /**
    * Returns the value by key or false if not found.
-   * 
+   *
    * @param { any } key
    * @returns { any | false }
    */
@@ -369,9 +388,9 @@ class Dictionary extends ____collection1 {
 
   /**
    * Returns the index of the provided key, or false if not found.
-   * 
+   *
    * @param {any} key
-   * 
+   *
    * @returns { number | false }
    */
   findIndexOfKey( key ) {
@@ -385,9 +404,9 @@ class Dictionary extends ____collection1 {
   /**
    * (private)
    * Returns an array with the index and the respective key-value pair object, or false in case it does not find the provided key.
-   * 
+   *
    * [index<number>, keyValuePair<object>]
-   * 
+   *
    * @param { any } key
    * @returns { Object | false }
    */
@@ -838,7 +857,11 @@ class ____TemplateElemCompiler {
     );
 
     return `
-      <template data-component="${componentName}" data-binding="${propertyToBind}" data-token="${SYNTAX_TOKENS.For}">
+      <template
+        ${ DATA_SET_TAGS.Component_Prefixed() }="${ componentName }"
+        ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ propertyToBind }"
+        data-token="${SYNTAX_TOKENS.For}"
+      >
         ${encodedForBlock}
       </template>
     `;
@@ -1002,7 +1025,11 @@ This is most likely a syntax error on the event property. The method call token 
 
     if ( isPropertyBinding ) {
       thisProperty = `
-        <span data-component="${component.name}" data-binding="${splitedProperties[splitedProperties.length - 1]}" data-token="${SYNTAX_TOKENS.SyntaxTagToken}">
+        <span
+          ${ DATA_SET_TAGS.Component_Prefixed() }="${ component.name }"
+          ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ splitedProperties[splitedProperties.length - 1] }"
+          data-token="${ SYNTAX_TOKENS.SyntaxTagToken }">
+
           ${thisProperty}
         </span>
       `;
@@ -1142,8 +1169,18 @@ class TemplateCompiler {
               const hasPropertyBinding = splitedProperties[0] === 'state';
 
               if ( hasPropertyBinding ) {
-                component.____private.templatesToInject.push( ____TemplateElemCompiler.FOR( component.name, splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1] ) );
-                compiledHtml += `<span ${DATA_SET_TAGS.Component_Prefixed}="${component.name}" ${DATA_SET_TAGS.BindingTo_Prefixed}="${splitedProperties[splitedProperties.length - 1]}">`;
+                component.____private.templatesToInject.push(
+                  ____TemplateElemCompiler.FOR(
+                    component.name,
+                    splitedProperties[splitedProperties.length - 1], blockResponse[0], blockResponse[1]
+                  )
+                );
+
+                compiledHtml += `
+                  <span
+                    ${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"
+                    ${DATA_SET_TAGS.BindingTo_Prefixed()}="${splitedProperties[splitedProperties.length - 1]}"
+                  >`;
               }
 
               switch ( blockResponse[0][1] ) {
