@@ -113,7 +113,9 @@ class TemplateCompiler {
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
               }
 
-              compiledHtml += '</span>';
+              if ( hasPropertyBinding ) {
+                compiledHtml += '</span>';
+              }
 
               break;
 

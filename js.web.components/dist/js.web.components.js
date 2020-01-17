@@ -1005,7 +1005,7 @@ This is most likely a syntax error on the event property. The method call token 
     }
 
     // Jump to after the "</_>"
-    innerIndex += 4;
+    innerIndex += 3;
 
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
@@ -1178,8 +1178,8 @@ class TemplateCompiler {
 
                 compiledHtml += `
                   <span
-                    ${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"
-                    ${DATA_SET_TAGS.BindingTo_Prefixed()}="${splitedProperties[splitedProperties.length - 1]}"
+                    ${ DATA_SET_TAGS.Component_Prefixed() }="${ component.name }"
+                    ${ DATA_SET_TAGS.BindingTo_Prefixed() }="${ splitedProperties[splitedProperties.length - 1] }"
                   >`;
               }
 
@@ -1201,7 +1201,9 @@ class TemplateCompiler {
                   throw new Error( `Unknown "for" statement: "${blockResponse[0]}"` );
               }
 
-              compiledHtml += '</span>';
+              if ( hasPropertyBinding ) {
+                compiledHtml += '</span>';
+              }
 
               break;
 

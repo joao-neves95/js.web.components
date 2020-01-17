@@ -127,7 +127,7 @@ This is most likely a syntax error on the event property. The method call token 
     }
 
     // Jump to after the "</_>"
-    innerIndex += 4;
+    innerIndex += 3;
 
     thisProperty = thisProperty.replace( /\s/g, '' );
     // In case its a nested property (part of an object).
