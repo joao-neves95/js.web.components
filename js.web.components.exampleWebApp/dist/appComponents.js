@@ -6,12 +6,58 @@
  *
  */
 
+// @import<<DIR './viewModels'
+// @import './sidenav/sidenav.template'
+// @import './sidenav/sidenav.component'
 // @import './header/header.template'
 // @import './header/header.component'
 // @import './nameList/nameList.template'
 // @import './nameList/nameList.component'
 
 'use strict';
+
+
+class NavItemViewModel {
+
+  constructor( label, url, ) {
+
+    this.label = label;
+    this.url = url;
+
+  }
+
+}
+
+
+const sidenavTemplate = `
+<aside>
+    <nav class="nav flex-column">
+
+        <_for let="item of navItems">
+            <a class="nav-link active" href="<_> item.url </_>">
+                <_> item.label </_>
+            </a>
+        </_for>
+
+    </nav>
+</aside>
+`;
+
+
+class SidenavComponent extends Component {
+
+  constructor() {
+    super( 'app-sidenav', sidenavTemplate, [''] );
+
+    this.navItems = [
+      new NavItemViewModel( 'Todo List', 'todo-list' ),
+      new NavItemViewModel( 'Stopwatch', 'stopwatch' ),
+      new NavItemViewModel( 'Documentation', 'documentation' )
+    ];
+
+  }
+
+}
 
 /*
  * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.

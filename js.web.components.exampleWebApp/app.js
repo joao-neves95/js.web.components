@@ -9,6 +9,7 @@
 'use strict';
 
 new Startup()
+  .addComponent( new SidenavComponent() )
   .addComponent( new HeaderComponent() )
   .addComponent( new NameListComponent() )
   .build();
