@@ -566,7 +566,6 @@ class DATA_SET_TAGS {
  *
  */
 
-
 const SYNTAX_TOKENS = Object.freeze( {
 
   OpenTag: '<',
@@ -686,13 +685,11 @@ class Utils {
  *
  */
 
-
 class Component {
 
   /**
    * Events:
-   * <void> onInit()
-   * <void> onDestroy()
+   * <void> afterRendered()
    *
    * @param { string } name The name of the component. To render this component, use a reference to this name ("&component-name").
    * @param { string } template The template.
@@ -814,7 +811,6 @@ class Component {
  *
  */
 
-
 class Page {
 
   constructor() { }
@@ -828,7 +824,6 @@ class Page {
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
 
 /**
  * For <template compilation>.
@@ -883,7 +878,6 @@ class ____TemplateElemCompiler {
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
 
 class ____HTMLBlocksCompiler {
 
@@ -1325,7 +1319,6 @@ Template:
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
 
 class Startup {
 

@@ -13,5 +13,7 @@
 // @import './components/header/header.component'
 // @import './components/nameList/nameList.template'
 // @import './components/nameList/nameList.component'
+// @import './components/stopwatch/stopwatch.template'
+// @import './components/stopwatch/stopwatch.component'
 
 'use strict';

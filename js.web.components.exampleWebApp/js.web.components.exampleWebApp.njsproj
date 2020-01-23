@@ -19,6 +19,14 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="components\header\header.component.js" />
+    <Content Include="components\header\header.template.js" />
+    <Content Include="components\nameList\nameList.component.js" />
+    <Content Include="components\nameList\nameList.template.js" />
+    <Content Include="components\sidenav\sidenav.component.js" />
+    <Content Include="components\sidenav\sidenav.template.js" />
+    <Content Include="components\stopwatch\stopwatch.component.js" />
+    <Content Include="components\stopwatch\stopwatch.template.js" />
     <Content Include="header\header.template.js">
       <SubType>Code</SubType>
     </Content>
@@ -28,10 +36,18 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="app.js" />
+    <Content Include="viewModels\navItemViewModel.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="assets\" />
+    <Folder Include="components\" />
+    <Folder Include="components\header\" />
+    <Folder Include="components\nameList\" />
+    <Folder Include="components\sidenav\" />
+    <Folder Include="components\stopwatch\" />
     <Folder Include="header\" />
     <Folder Include="nameList\" />
+    <Folder Include="viewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="appComponents.header.js" />

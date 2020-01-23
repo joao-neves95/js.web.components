@@ -7,14 +7,24 @@
  */
 
 // @import<<DIR './viewModels'
-// @import './sidenav/sidenav.template'
-// @import './sidenav/sidenav.component'
-// @import './header/header.template'
-// @import './header/header.component'
-// @import './nameList/nameList.template'
-// @import './nameList/nameList.component'
+// @import './components/sidenav/sidenav.template'
+// @import './components/sidenav/sidenav.component'
+// @import './components/header/header.template'
+// @import './components/header/header.component'
+// @import './components/nameList/nameList.template'
+// @import './components/nameList/nameList.component'
+// @import './components/stopwatch/stopwatch.template'
+// @import './components/stopwatch/stopwatch.component'
 
 'use strict';
+
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
 
 
 class NavItemViewModel {
@@ -28,13 +38,21 @@ class NavItemViewModel {
 
 }
 
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
 
 const sidenavTemplate = `
 <aside>
-    <nav class="nav flex-column">
+    <nav class="nav nav-pills flex-column">
 
         <_for let="item of navItems">
-            <a class="nav-link active" href="<_> item.url </_>">
+            <a class="nav-link" href="<_> item.url </_>">
                 <_> item.label </_>
             </a>
         </_for>
@@ -42,6 +60,14 @@ const sidenavTemplate = `
     </nav>
 </aside>
 `;
+
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
 
 
 class SidenavComponent extends Component {
@@ -66,7 +92,6 @@ class SidenavComponent extends Component {
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
 
 const headerTemplate = `
 <div class="container">
@@ -93,7 +118,6 @@ const headerTemplate = `
  *
  */
 
-
 class HeaderComponent extends Component {
 
   constructor() {
@@ -115,7 +139,6 @@ class HeaderComponent extends Component {
  * version 3, located in the root of this project, under the name "LICENSE.md".
  *
  */
-
 
 const nameListTemplate = `
 <div class="container">
@@ -154,7 +177,6 @@ const nameListTemplate = `
  *
  */
 
-
 class NameListComponent extends Component {
 
   constructor() {
@@ -169,6 +191,102 @@ class NameListComponent extends Component {
 
   addItem() {
     this.state.todoItems.push( document.getElementById( 'new-todo-item' ).value );
+  }
+
+}
+
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
+
+const stopwatchTemplate = `
+<div>
+    <p> <span id="hours">0</span>:<span id="minutes">0</span>:<span id="seconds">0</span> </p>
+</div>
+
+<div>
+    <button (click)="startClock()" id="start">START</button>
+    <button (click)="stopClock()" id="stop">STOP</button>
+    <button (click)="restartClock()" id="restart">RESTART</button>
+</div>
+`;
+
+/*
+ * Copyright (c) 2019 Jo�o Pedro Martins Neves (shivayl) - All Rights Reserved.
+ *
+ * All content is licensed under the GNU Lesser General Public License (LGPL),
+ * version 3, located in the root of this project, under the name "LICENSE.md".
+ *
+ */
+
+
+class StopwatchComponent extends Component {
+
+  constructor() {
+    super( 'app-stopwatch', stopwatchTemplate, [ '' ] );
+
+    this.____secondsInterval;
+    this.____minutesInterval;
+    this.____hoursInterval;
+
+  }
+
+  startClock() {
+    // Seconds.
+    this.____secondsInterval = setInterval( () => {
+      const elem = document.getElementById( 'seconds' );
+      let time = parseInt( elem.innerText );
+
+      if ( time === 60 ) {
+        time = -1;
+      }
+
+      elem.innerText = time + 1;
+
+    }, 1000 );
+
+    // Minutes.
+    this.____minutesInterval = setInterval( () => {
+      const elem = document.getElementById( 'minutes' );
+      let time = parseInt( elem.innerText )
+
+      if ( time === 60 ) {
+        time = -1;
+      }
+
+      elem.innerText = time + 1;
+
+    }, 1000 * 60 );
+
+    // Hours.
+    this.____hoursInterval = setInterval( () => {
+      const elem = document.getElementById( 'hours' );
+      let time = parseInt( elem.innerText );
+
+      if ( time === 23 ) {
+        time = -1;
+      }
+
+      elem.innerText = time + 1;
+
+    }, 1000 * 60 * 60 );
+  }
+
+  stopClock() {
+    clearInterval( this.____secondsInterval );
+    clearInterval( this.____minutesInterval );
+    clearInterval( this.____hoursInterval );
+  }
+
+  restartClock() {
+    document.getElementById( 'seconds' ).innerText = 0;
+    document.getElementById( 'minutes' ).innerText = 0;
+    document.getElementById( 'hours' ).innerText = 0;
   }
 
 }

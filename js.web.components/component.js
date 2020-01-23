@@ -11,8 +11,7 @@ class Component {
 
   /**
    * Events:
-   * <void> onInit()
-   * <void> onDestroy()
+   * <void> afterRendered()
    *
    * @param { string } name The name of the component. To render this component, use a reference to this name ("&component-name").
    * @param { string } template The template.

@@ -25,7 +25,6 @@
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="app.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="component.js" />
