@@ -6,7 +6,6 @@
  *
  */
 
-
 class NameListComponent extends Component {
 
   constructor() {

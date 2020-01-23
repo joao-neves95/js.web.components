@@ -6,7 +6,6 @@
  *
  */
 
-
 class HeaderComponent extends Component {
 
   constructor() {

@@ -19,6 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="assets\css\sidenav.css" />
     <Content Include="components\header\header.component.js" />
     <Content Include="components\header\header.template.js" />
     <Content Include="components\nameList\nameList.component.js" />
@@ -27,9 +28,7 @@
     <Content Include="components\sidenav\sidenav.template.js" />
     <Content Include="components\stopwatch\stopwatch.component.js" />
     <Content Include="components\stopwatch\stopwatch.template.js" />
-    <Content Include="header\header.template.js">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="dist\appComponents.js" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
@@ -40,22 +39,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
+    <Folder Include="assets\css\" />
     <Folder Include="components\" />
     <Folder Include="components\header\" />
     <Folder Include="components\nameList\" />
     <Folder Include="components\sidenav\" />
     <Folder Include="components\stopwatch\" />
-    <Folder Include="header\" />
-    <Folder Include="nameList\" />
+    <Folder Include="dist\" />
     <Folder Include="viewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="appComponents.header.js" />
-    <Compile Include="header\header.component.js">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="nameList\nameList.component.js" />
-    <Compile Include="nameList\nameList.template.js" />
     <Compile Include="jsDocReferences.js">
       <SubType>Code</SubType>
     </Compile>

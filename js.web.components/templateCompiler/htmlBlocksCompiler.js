@@ -6,7 +6,6 @@
  *
  */
 
-
 class ____HTMLBlocksCompiler {
 
   constructor() { }

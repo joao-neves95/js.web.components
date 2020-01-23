@@ -6,7 +6,6 @@
  *
  */
 
-
 const SYNTAX_TOKENS = Object.freeze( {
 
   OpenTag: '<',

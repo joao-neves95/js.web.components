@@ -6,7 +6,6 @@
  *
  */
 
-
 const nameListTemplate = `
 <div class="container">
     <ul>
