@@ -1,18 +1,44 @@
 ﻿<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <title> js.web.components Example WebApp </title>
     <link rel="stylesheet" href="./libs/bootstrap-4.4.1-dist/css/bootstrap.min.css">
 </head>
+
 <body>
 
-    <app-header&>
-    </app-header&>
+    <div class="container">
 
-    <app-nameList&>
-    </app-nameList&>
+        <div class="row">
+            <div class="col-3">
+
+                <app-header&>
+                </app-header&>
+
+                <app-sidenav&>
+                </app-sidenav>
+
+            </div>
+
+            <main class="col-9">
+
+                <div class="row">
+                    <div class="col-12">
+
+                        <app-nameList&>
+                        </app-nameList&>
+
+                    </div>
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
 
     <script src="./libs/jquery-3.4.1.slim.min.js"></script>
     <script src="./libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
@@ -20,4 +46,5 @@
     <script src="./dist/appComponents.js"></script>
     <script src="./app.js"></script>
 </body>
+
 </html>
