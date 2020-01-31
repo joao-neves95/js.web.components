@@ -11,6 +11,6 @@
 new Startup()
   .addComponent( new SidenavComponent() )
   .addComponent( new HeaderComponent() )
-  .addComponent( new NameListComponent() )
+  .addComponent( new TodoListComponent() )
   .addComponent( new StopwatchComponent() )
   .build();

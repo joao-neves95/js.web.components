@@ -1,0 +1,22 @@
+
+.input-wrapper {
+  margin-top: 5em;
+}
+
+.input-wrapper input {
+  margin-left: 1em;
+}
+
+.output-wrapper > p {
+  margin-top: 2em;
+}
+
+.output-wrapper > ul {
+  list-style: none;
+  padding: 0;
+}
+
+.output-wrapper i {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}

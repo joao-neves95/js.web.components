@@ -11,8 +11,8 @@
 // @import './components/sidenav/sidenav.component'
 // @import './components/header/header.template'
 // @import './components/header/header.component'
-// @import './components/nameList/nameList.template'
-// @import './components/nameList/nameList.component'
+// @import './components/todoList/todoList.template'
+// @import './components/todoList/todoList.component'
 // @import './components/stopwatch/stopwatch.template'
 // @import './components/stopwatch/stopwatch.component'
 
