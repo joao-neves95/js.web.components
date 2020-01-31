@@ -103,13 +103,13 @@ class Startup {
 
             document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisMethodCall.identifier }"]` )
               .addEventListener( thisMethodCall.eventName, ( e ) => {
-                const funcToCall = component[ e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ] ];
+                const methodToCall = e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ];
 
-                if ( !funcToCall ) {
-                  throw new Error( `The method of the component "${component.name}" of name "${e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ]}" not found.` );
+                if ( !component[ methodToCall ] ) {
+                  throw new Error( `The method of the component "${component.name}" of name "${methodToCall}" not found.` );
                 }
 
-                funcToCall( e );
+                component[ methodToCall ]( e );
               } );
           }
 
