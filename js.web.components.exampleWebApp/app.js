@@ -13,4 +13,5 @@ new Startup()
   .addComponent( new HeaderComponent() )
   .addComponent( new TodoListComponent() )
   .addComponent( new StopwatchComponent() )
+  // .addComponent( new DocumentationComponent() )
   .build();

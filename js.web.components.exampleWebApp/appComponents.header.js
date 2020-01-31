@@ -15,5 +15,7 @@
 // @import './components/todoList/todoList.component'
 // @import './components/stopwatch/stopwatch.template'
 // @import './components/stopwatch/stopwatch.component'
+// @import './components/documentation/documentation.template'
+// @import './components/documentation/documentation.component'
 
 'use strict';

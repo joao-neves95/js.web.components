@@ -33,9 +33,6 @@ class TodoListComponent extends Component {
   toggleDone( e ) {
     if ( e.target.classList.contains( 'far' ) ) {
       e.target.classList.replace( 'far', 'fas' );
-
-      console.log( e.target )
-
       e.target.parentElement.style.textDecoration = 'line-through';
 
     } else {
@@ -56,8 +53,6 @@ class TodoListComponent extends Component {
 
   removeItem( e ) {
     const itemIdx = this.state.todoItems.findIndex( val => val === e.target.parentElement.innerText.trim() );
-
-    console.log(itemIdx)
 
     if ( itemIdx >= 0 ) {
       this.state.todoItems.splice( itemIdx, 1 );

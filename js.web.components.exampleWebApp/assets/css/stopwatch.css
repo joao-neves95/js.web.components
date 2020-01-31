@@ -1,0 +1,12 @@
+
+#stopwatch {
+  margin-top: 6em;
+}
+
+.stopwatch-wrapper {
+  text-align: center;
+}
+
+.stopwatch-wrapper > p {
+  font-size: 2rem;
+}

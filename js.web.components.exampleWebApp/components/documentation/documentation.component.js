@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2019 João Pedro Martins Neves (shivayl) - All Rights Reserved.
  *
  * All content is licensed under the GNU Lesser General Public License (LGPL),
@@ -6,16 +6,10 @@
  *
  */
 
-class HeaderComponent extends Component {
+class DocumentationComponent extends Component {
 
   constructor() {
-    super( 'app-header', headerTemplate, [''] );
-
-    this.title = 'js.web.components';
-
-    this.state = this.createState( {
-      myName: 'João Neves'
-    } );
+    super( 'app-documentation', documentationTemplate, [''] );
   }
 
 }
