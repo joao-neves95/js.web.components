@@ -74,46 +74,35 @@ class Startup {
           let i;
           for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
             document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[ i ] );
+            this.____addEventListenersToMethodCalls( component );
+            // To free after the initial compilation.
+            this.____freeComponent( component );
 
             Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"]` ) ).forEach( ( template ) => {
 
               // It was necessary to make an Observer out of the component, because components don't have access
               // to the TemplateCompiler.
               component.____private.subToCustomStateChange( template.dataset.binding, ( property, value ) => {
-                /** @type { Component } */
-                const innerComponent = Object.assign( {}, component );
+                // Create the same class type instance with all prototypes.
+                let innerComponent = Object.create( component );
+                // Assign all properties to the new instance.
+                innerComponent = Object.assign( component );
 
-                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"][${DATA_SET_TAGS.BindingTo_Prefixed()}="${property}"]` ) )
+                Array.from( document.querySelectorAll( `span[${DATA_SET_TAGS.Component_Prefixed()}="${innerComponent.name}"][${DATA_SET_TAGS.BindingTo_Prefixed()}="${property}"]` ) )
                   .forEach( ( elem ) => {
                     innerComponent.template = decodeURI( template.innerHTML );
                     elem.innerHTML = TemplateCompiler.compile( innerComponent );
+                    this.____addEventListenersToMethodCalls( innerComponent );
                   } );
+
+                // To free after custom changes.
+                this.____freeComponent( component );
               } );
 
             } );
 
           }
 
-          component.____private.templatesToInject = [];
-
-          let thisMethodCall;
-          for ( i = 0; i < component.____private.methodCallsOnEvents.length; ++i ) {
-            /** @type { MethodCallOnEvent } */
-            thisMethodCall = component.____private.methodCallsOnEvents[ i ];
-
-            document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisMethodCall.identifier }"]` )
-              .addEventListener( thisMethodCall.eventName, ( e ) => {
-                const methodToCall = e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ];
-
-                if ( !component[ methodToCall ] ) {
-                  throw new Error( `The method of the component "${component.name}" of name "${methodToCall}" not found.` );
-                }
-
-                component[ methodToCall ]( e );
-              } );
-          }
-
-          component.____private.methodCallsOnEvents = [];
         }
       );
 
@@ -123,6 +112,45 @@ class Startup {
     }
 
     window.startup = this;
+  }
+
+  /**
+   *
+   * @param { MethodCallOnEvent } thisMethodCall
+   */
+  ____addEventListenersToMethodCalls( component ) {
+    let thisMethodCall;
+    let thisElem;
+    for ( let i = 0; i < component.____private.methodCallsOnEvents.length; ++i ) {
+      /** @type { MethodCallOnEvent } */
+      thisMethodCall = component.____private.methodCallsOnEvents[ i ];
+      thisElem = document.querySelector( `[${ DATA_SET_TAGS.EventMethodCall_Prefixed() }="${ thisMethodCall.identifier }"]` );
+
+      if ( !thisElem ) {
+        continue;
+      }
+
+      thisElem.addEventListener( thisMethodCall.eventName, ( e ) => {
+        e.stopPropagation();
+        const methodToCall = e.target.dataset[ DATA_SET_TAGS.EventMethodToCall() ];
+
+        if ( !component[ methodToCall ] ) {
+          throw new Error( `The method of the component "${component.name}" of name "${methodToCall}" not found. Method call ID: ${thisMethodCall.identifier}` );
+        }
+
+        component[ methodToCall ]( e );
+        return false;
+      } );
+    }
+  }
+
+  /**
+   *
+   * @param { Component } component
+   */
+  ____freeComponent( component ) {
+    component.____private.templatesToInject = [];
+    component.____private.methodCallsOnEvents = [];
   }
 
 }
