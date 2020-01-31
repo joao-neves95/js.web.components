@@ -74,9 +74,6 @@ class Startup {
           let i;
           for ( i = 0; i < component.____private.templatesToInject.length; ++i ) {
             document.body.insertAdjacentHTML( 'beforeend', component.____private.templatesToInject[ i ] );
-            this.____addEventListenersToMethodCalls( component );
-            // To free after the initial compilation.
-            this.____freeComponent( component );
 
             Array.from( document.querySelectorAll( `template[${DATA_SET_TAGS.Component_Prefixed()}="${component.name}"]` ) ).forEach( ( template ) => {
 
@@ -103,6 +100,10 @@ class Startup {
 
           }
 
+          // Initial event listeners.
+          this.____addEventListenersToMethodCalls( component );
+          // To free after the initial compilation.
+          this.____freeComponent( component );
         }
       );
 
